@@ -1,0 +1,10 @@
+
+@font-face { font-family: solyway; 
+    src: url('font/Solway-Regular.ttf'); } 
+body{
+    font-family: Solway,Verdana, Geneva, Tahoma, sans-serif;
+}
+.text-size{
+
+    font-size: 1.2rem;
+}
