@@ -1,3 +1,7 @@
+<?php 
+
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -45,11 +49,11 @@
           <!-- Modal body -->
           <div class="modal-body">
             <button class="btn btn-dark d-block ml-auto" data-toggle="modal" data-target="#signup" data-dismiss="modal">Sign Up</button>
-            <form>
+            <form action="" method="POST">
               <label class="my-2">Username</label>
-              <input class="form-control" type="text">
+              <input class="form-control" type="text" name="username">
               <label class="my-2">Password</label>
-              <input type="password" class="form-control" name="" id="">
+              <input type="password" class="form-control" name="password" id="">
               <button type="submit" class="btn btn-warning d-block mx-auto mt-3">Login</button>
             </form>
           </div>
@@ -70,13 +74,17 @@
           <!-- Modal body -->
           <div class="modal-body">
             <button class="btn btn-dark d-block ml-auto" data-dismiss="modal" data-toggle="modal" data-target="#login">Login</button>
-            <form>
+            <form action="#" method="POST">
               <label class="my-2">Email</label>
-              <input class="form-control" type="email">
+              <input class="form-control" type="email" name="email">
+              <label class="my-2">Name</label>
+              <input class="form-control" type="text" name="name">
               <label class="my-2">Username</label>
-              <input class="form-control" type="text">
+              <input class="form-control" type="text" name="username">
               <label class="my-2">Password</label>
-              <input type="password" class="form-control" name="" id="">
+              <input type="password" class="form-control" name="password" id="">
+              <label class="my-2">Age</label>
+              <input class="form-control" type="number" name="age">
               <button type="submit" class="btn btn-warning d-block mx-auto mt-3">SignUp</button>
             </form>
           </div>
