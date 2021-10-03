@@ -1,3 +1,13 @@
+<?php
+
+  $pdo = new PDO('mysql:host=localhost;port=3306;dbname=store', 'root', '');
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+  $errors = [];
+  $username = '';
+  $password = '';
+
+?>
 <!doctype html>
 <html lang="en">
   <head>
@@ -27,10 +37,28 @@
             <li class="nav-item font-weight-bold text-size mx-md-1">
             <a class="nav-link" style="cursor: pointer;" href="../signup/">SignUp</a>
             </li>
-        
-        </div>
+        </ul>    
+        </div>  
     </nav>
     </nav>
+    <div class="center mb-3">
+      <div class="container  shadow-lg p-4 bg-white border-round " style="width:30%;margin-top:3rem;">
+        <?php if (!empty($errors)) : ?>
+          <div class="m-1 alert alert-danger">
+            <?php foreach ($errors as $error) : ?>
+              <?php echo $error ?><br>
+            <?php endforeach; ?>
+          </div>
+        <?php endif; ?>             
+        <form action="" method="POST">
+          <label class="my-2">Username</label>
+          <input class="form-control" type="text" name="username" value="<?php echo $username; ?>">
+          <label class="my-2">Password</label>
+          <input type="password" class="form-control" name="password" value="<?php echo $password; ?>">
+          <button type="submit" class="btn btn-warning d-block mx-auto mt-3">Login</button>
+        </form>    
+      </div>
+    </div>
     <script src="js/jquery.js"></script>
     <script src="js/bootstrap4.js"></script>
   </body>
