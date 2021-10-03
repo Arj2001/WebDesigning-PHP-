@@ -1,5 +1,13 @@
 <?php 
 
+ 
+  $errors = [];
+  $name ='';
+  $username = '';
+  $email = '';
+  $age = '';
+  $password = '';
+
 
 ?>
 <!doctype html>
@@ -29,7 +37,7 @@
               <a class="nav-link" href="#">About</a>
             </li>
             <li class="nav-item font-weight-bold text-size mx-md-1">
-              <a class="nav-link" style="cursor: pointer;" data-toggle="modal" data-target="#login">Login</a>
+              <a class="nav-link" style="cursor: pointer;" href="login/">Login</a>
             </li>
           
         </div>
@@ -42,7 +50,7 @@
 
           <!-- Modal Header -->
           <div class="modal-header">
-            <h4 class="modal-title text-center">Login</h4>
+            <h4 class="modal-username text-center">Login</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
 
@@ -67,26 +75,15 @@
 
           <!-- Modal Header -->
           <div class="modal-header">
-            <h4 class="modal-title text-center">SignUp</h4>
+            <h4 class="modal-username text-center">SignUp</h4>
             <button type="button" class="close" data-dismiss="modal">&times;</button>
           </div>
 
           <!-- Modal body -->
           <div class="modal-body">
             <button class="btn btn-dark d-block ml-auto" data-dismiss="modal" data-toggle="modal" data-target="#login">Login</button>
-            <form action="#" method="POST">
-              <label class="my-2">Email</label>
-              <input class="form-control" type="email" name="email">
-              <label class="my-2">Name</label>
-              <input class="form-control" type="text" name="name">
-              <label class="my-2">Username</label>
-              <input class="form-control" type="text" name="username">
-              <label class="my-2">Password</label>
-              <input type="password" class="form-control" name="password" id="">
-              <label class="my-2">Age</label>
-              <input class="form-control" type="number" name="age">
-              <button type="submit" class="btn btn-warning d-block mx-auto mt-3">SignUp</button>
-            </form>
+    
+            
           </div>
 
         </div>
@@ -111,7 +108,7 @@
           <div class="card" style="width:300px">
             <img class="card-img-top" src="apps/vlc media player/VLC_media_player-Logo.wine.png" alt="Vlc media player logo" style="width:100%">
             <div class="card-body">
-              <h4 class="card-title">Vlc Media Player</h4>
+              <h4 class="card-username">Vlc Media Player</h4>
               <p class="card-text">A Simple video player</p>
               <a href="#" class="btn btn-primary stretched-link">Download</a>
             </div>
@@ -121,7 +118,7 @@
           <div class="card" style="width:300px">
             <img class="card-img-top" src="apps/vlc media player/VLC_media_player-Logo.wine.png" alt="Vlc media player logo" style="width:100%">
             <div class="card-body">
-              <h4 class="card-title">Vlc Media Player</h4>
+              <h4 class="card-username">Vlc Media Player</h4>
               <p class="card-text">A Simple video player</p>
               <a href="#" class="btn btn-primary stretched-link">Download</a>
             </div>
@@ -131,7 +128,7 @@
           <div class="card" style="width:300px">
             <img class="card-img-top" src="apps/vlc media player/VLC_media_player-Logo.wine.png" alt="Vlc media player logo" style="width:100%">
             <div class="card-body">
-              <h4 class="card-title">Vlc Media Player</h4>
+              <h4 class="card-username">Vlc Media Player</h4>
               <p class="card-text">A Simple video player</p>
               <a href="#" class="btn btn-primary stretched-link">Download</a>
             </div>

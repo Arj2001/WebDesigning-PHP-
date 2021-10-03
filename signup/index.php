@@ -1,0 +1,114 @@
+<?php 
+
+  $pdo = new PDO('mysql:host=localhost;port=3306;dbname=store', 'root', '');
+  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+  $errors = [];
+  $name ='';
+  $username = '';
+  $email = '';
+  $age = '';
+  $password = '';
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $name = $_POST['name'];
+    $age = $_POST['age'];
+    $password = $_POST['password'];
+    $acc_type = 'admin';
+    $date = date('Y-m-d H:i:s');
+
+    if (!$username) {
+      $errors[] = 'Username is Needed!!!';
+    }
+    if (!$name) {
+      $errors[] = 'Name is Needed!!!';
+    }
+    if (!$email){
+      $errors[] = 'Email is needed!!!';
+    }
+    if (!$age) {
+      $errors[] = 'Age is Needed!!!';
+    }
+    if (!$password) {
+      $errors[] = 'Password is Needed!!!';
+    }
+    if (empty($errors)) { 
+      $statement = $pdo->prepare("INSERT INTO users(username, email, name, age, password, acc_type, created_date)
+              VALUES (:username , :email , :name , :age, :password, :acc_type, :date)
+            ");
+        
+      $statement->bindValue(':username', $username);
+      $statement->bindValue(':email', $email);
+      $statement->bindValue(':name', $name);
+      $statement->bindValue(':age', $age);
+      $statement->bindValue(':password', $password);
+      $statement->bindValue(':acc_type', $acc_type);
+      $statement->bindValue(':date', $date);
+      $statement->execute();
+      header("location:../index.php");    
+    }
+  }
+?>
+<!doctype html>
+<html lang="en">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">        
+      <link rel="stylesheet" href="../css/bootstrap4.css">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+      <link rel="stylesheet" href="../css/style.css">
+      <title>STORE</title>
+  </head>
+  <body>
+        <nav class="conatiner">
+        <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+            <a class="navbar-brand mx-md-4" href="../">STORE</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto mr-md-4 ">
+                <li class="nav-item font-weight-bold text-size mx-md-1">
+                <a class="nav-link" href="#">About</a>
+                </li>
+                <li class="nav-item font-weight-bold text-size mx-md-1">
+                <a class="nav-link" style="cursor: pointer;" href="../login/">Login</a>
+                </li>
+            
+            </div>
+        </nav>
+        </nav>
+        
+        <div class="container mt-md-5 pt-md-5 shadow-lg p-4 mb-4 bg-white border-round" style="width:40%;" >
+            <?php if (!empty($errors)) : ?>
+              <div class="m-1 alert alert-danger">
+                <?php foreach ($errors as $error) : ?>
+                  <?php echo $error ?><br>
+                <?php endforeach; ?>
+              </div>
+            <?php endif; ?>             
+            <form action="" method="POST">
+                <label class="my-2 ">Email</label>
+                <input class="form-control" type="email" name="email" value="<?php echo $email; ?>">
+                <label class="my-2 ">Name</label>
+                <input class="form-control" type="text" name="name" value="<?php echo $name; ?>">
+                <label class="my-2">Username</label>
+                <input class="form-control" type="text" name="username" value="<?php echo $username; ?>">
+                <label class="my-2">Password</label>
+                <input type="password" class="form-control" name="password" value="<?php echo $password; ?>">
+                <label class="my-2">Age</label>
+                <input class="form-control" type="number" name="age" value="<?php echo $age; ?>">
+                <button type="submit" class="btn btn-warning d-block mx-auto mt-3">SignUp</button>
+            </form>    
+        </div>
+        
+        <script src="js/jquery.js"></script>
+        <script src="js/bootstrap4.js"></script>
+  </body>
+
+</html>
