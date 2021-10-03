@@ -103,7 +103,7 @@
                 <input type="password" class="form-control" name="password" value="<?php echo $password; ?>">
                 <label class="my-2">Age</label>
                 <input class="form-control" type="number" name="age" value="<?php echo $age; ?>">
-                <button type="submit" class="btn btn-warning d-block mx-auto mt-3">SignUp</button>
+                <button type="submit" name="signup" class="btn btn-warning d-block mx-auto mt-3">SignUp</button>
             </form>    
         </div>
         

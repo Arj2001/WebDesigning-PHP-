@@ -55,7 +55,7 @@
           <input class="form-control" type="text" name="username" value="<?php echo $username; ?>">
           <label class="my-2">Password</label>
           <input type="password" class="form-control" name="password" value="<?php echo $password; ?>">
-          <button type="submit" class="btn btn-warning d-block mx-auto mt-3">Login</button>
+          <button type="submit" name="login" class="btn btn-warning d-block mx-auto mt-3">Login</button>
         </form>    
       </div>
     </div>
