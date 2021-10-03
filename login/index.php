@@ -1,11 +1,41 @@
 <?php
-
+  $username = '';
+  $password = '';
+  session_start();
   $pdo = new PDO('mysql:host=localhost;port=3306;dbname=store', 'root', '');
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
   $errors = [];
-  $username = '';
-  $password = '';
+  
+  if(isset($_POST['login'])){
+    $username=$_POST['username'];
+    $password=$_POST['password'];
+    if (!$username) {
+      $errors[] = 'Username is Needed!!!';
+    }
+    if(!$password){
+      $errors[] ="Password is Needed!!!";
+    }
+    if(empty($errors)){
+      $statement=$pdo->prepare("SELECT * FROM users WHERE username = :username AND password = :password");
+      $statement->bindValue(':username',$username);
+      $statement->bindValue(':password',$password);
+      $statement->execute(array(  
+        'username'     =>     $_POST["username"],  
+        'password'     =>     $_POST["password"]  
+          )  );
+      $count=$statement->rowCount();
+      if($count > 0)  
+        {  
+            $_SESSION["username"] = $_POST["username"];  
+            header("location:login_success.php");  
+        }  
+        else  
+        {  
+          $errors[]="Username and Password is incorrect!!" ;
+        }  
+    }
+  }
 
 ?>
 <!doctype html>
