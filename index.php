@@ -1,13 +1,6 @@
 <?php 
 
- 
-  $errors = [];
-  $name ='';
-  $username = '';
-  $email = '';
-  $age = '';
-  $password = '';
-
+session_start();
 
 ?>
 <!doctype html>
@@ -36,10 +29,22 @@
             <li class="nav-item font-weight-bold text-size mx-md-1">
               <a class="nav-link" href="#">About</a>
             </li>
-            <li class="nav-item font-weight-bold text-size mx-md-1">
-              <a class="nav-link" style="cursor: pointer;" href="login/">Login</a>
-            </li>
-          
+            
+            <?php 
+              if(isset($_SESSION['username'])){
+               echo'<li class="nav-item font-weight-bold text-size mx-md-1">
+                    <a class="nav-link" style="cursor: pointer;" href="#">'.$_SESSION['username'].'</a>
+                  </li>';
+                echo'<li class="nav-item font-weight-bold text-size mx-md-1">
+                    <a class="nav-link" style="cursor: pointer;" href="login/logout.php">Logout</a>
+                    </li>';
+              }
+              else{
+                echo'<li class="nav-item font-weight-bold text-size mx-md-1">
+                    <a class="nav-link" style="cursor: pointer;" href="login/">Login</a>
+                    </li>';
+              }
+            ?>
         </div>
       </nav>
     </nav>
