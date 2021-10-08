@@ -6,3 +6,4 @@ session_start();
       echo '<br /><br /><a href="logout.php">Logout</a>';  
  }  
 ?>
+<!-- created by ARJUN RAJU -->

@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 
 <head>
-
+  <!-- created by ARJUN RAJU -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="stylesheet" href="../css/bootstrap4.css">
@@ -117,8 +117,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
   </div>
 
-  <script src="js/jquery.js"></script>
-  <script src="js/bootstrap4.js"></script>
+  <script src="../js/jquery.js"></script>
+  <script src="../js/bootstrap4.js"></script>
 </body>
 
 </html>
