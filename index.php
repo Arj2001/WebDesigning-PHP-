@@ -36,7 +36,7 @@ session_start();
                     <a class="nav-link" style="cursor: pointer;" href="#">'.$_SESSION['username'].'</a>
                   </li>';
                 echo'<li class="nav-item font-weight-bold text-size mx-md-1">
-                    <a class="nav-link" style="cursor: pointer;" href="login/logout.php">Logout</a>
+                    <a class="nav-link" style="cursor: pointer;" href="logout.php">Logout</a>
                     </li>';
               }
               else{
@@ -49,51 +49,7 @@ session_start();
       </nav>
     </nav>
        
-    <div class="modal" id="login">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-username text-center">Login</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-
-          <!-- Modal body -->
-          <div class="modal-body">
-            <button class="btn btn-dark d-block ml-auto" data-toggle="modal" data-target="#signup" data-dismiss="modal">Sign Up</button>
-            <form action="" method="POST">
-              <label class="my-2">Username</label>
-              <input class="form-control" type="text" name="username">
-              <label class="my-2">Password</label>
-              <input type="password" class="form-control" name="password" id="">
-              <button type="submit" class="btn btn-warning d-block mx-auto mt-3">Login</button>
-            </form>
-          </div>
-
-        </div>
-      </div>
-    </div>
-    <div class="modal" id="signup">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-          <!-- Modal Header -->
-          <div class="modal-header">
-            <h4 class="modal-username text-center">SignUp</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-
-          <!-- Modal body -->
-          <div class="modal-body">
-            <button class="btn btn-dark d-block ml-auto" data-dismiss="modal" data-toggle="modal" data-target="#login">Login</button>
     
-            
-          </div>
-
-        </div>
-      </div>
-    </div>
     <div class="conatiner d-flex justify-content-center mt-md-5">
       <h1>Search Our STORE</h1>
     </div>

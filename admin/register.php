@@ -1,5 +1,5 @@
 <?php
-
+//admin register page
 $pdo = new PDO('mysql:host=localhost;port=3306;dbname=store', 'root', '');
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $name = $_POST['name'];
   $age = $_POST['age'];
   $password = $_POST['password'];
-  $acc_type = 'admin';
   $date = date('Y-m-d H:i:s');
 
   if (!$username) {
@@ -44,8 +43,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors[] ="Password should be 8 characters or more!!!";
   }
   if (empty($errors)) {
-    $statement = $pdo->prepare("INSERT INTO users(username, email, name, age, password, acc_type, created_date)
-              VALUES (:username , :email , :name , :age, :password, :acc_type, :date)
+  $duplicate1=$pdo->prepare("SELECT * FROM admin WHERE username = :username");
+  $duplicate1->bindValue(':username',$username);
+  $duplicate1->execute();
+  $duprow1=$duplicate1->rowCount();
+  $duplicate2=$pdo->prepare("SELECT * FROM admin WHERE email = :email");
+  $duplicate2->bindValue(':email',$email);  
+  $duplicate2->execute();
+  $duprow2=$duplicate2->rowCount();
+  if($duprow1>0){
+    $errors[]="The username is already registerd create new one!!!";
+  }
+  
+  if($duprow2>0){
+    $errors[]="The email is already exist, add new one!!!";
+  }
+  }
+  if (empty($errors)) {
+    $statement = $pdo->prepare("INSERT INTO admin(username, email, name, age, password, created_date)
+              VALUES (:username , :email , :name , :age, :password,  :date)
             ");
 
     $statement->bindValue(':username', $username);
@@ -53,10 +69,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $statement->bindValue(':name', $name);
     $statement->bindValue(':age', $age);
     $statement->bindValue(':password', $password);
-    $statement->bindValue(':acc_type', $acc_type);
     $statement->bindValue(':date', $date);
     $statement->execute();
-    header("location:../index.php");
+    header("location:login.php");
   }
 }
 ?>
@@ -87,13 +102,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a class="nav-link" href="#">About</a>
           </li>
           <li class="nav-item font-weight-bold text-size mx-md-1">
-            <a class="nav-link" style="cursor: pointer;" href="../login/">Login</a>
+            <a class="nav-link" style="cursor: pointer;" href="login.php">Login</a>
           </li>
         </ul>
       </div>
     </nav>
   </nav>
-
+  <div class="conatiner d-flex justify-content-center mt-md-5">
+      <h3>Create Your Admin account</h3>
+  </div>
   <div class="container mt-md-5 pt-md-5 shadow-lg p-4 mb-4 bg-white border-round" style="width:40%;">
     <?php if (!empty($errors)) : ?>
       <div class="m-1 alert alert-danger">
@@ -113,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <input type="password" class="form-control" name="password" value="<?php echo $password; ?>">
       <label class="my-2">Age</label>
       <input class="form-control" type="number" name="age" value="<?php echo $age; ?>">
-      <button type="submit" name="signup" class="btn btn-warning d-block mx-auto mt-3">SignUp</button>
+      <button type="submit" name="signup" class="btn btn-warning d-block mx-auto mt-3">Register</button>
     </form>
   </div>
 
