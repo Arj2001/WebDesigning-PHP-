@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $name = $_POST['name'];
   $age = $_POST['age'];
   $password = $_POST['password'];
-  $acc_type = 'admin';
   $date = date('Y-m-d H:i:s');
 
   if (!$username) {
@@ -44,8 +43,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors[] ="Password should be 8 characters or more!!!";
   }
   if (empty($errors)) {
-    $statement = $pdo->prepare("INSERT INTO users(username, email, name, age, password, acc_type, created_date)
-              VALUES (:username , :email , :name , :age, :password, :acc_type, :date)
+    $duplicate1=$pdo->prepare("SELECT * FROM users WHERE username = :username");
+    $duplicate1->bindValue(':username',$username);
+    $duplicate1->execute();
+    $duprow1=$duplicate1->rowCount();
+    $duplicate2=$pdo->prepare("SELECT * FROM users WHERE email = :email");
+    $duplicate2->bindValue(':email',$email);  
+    $duplicate2->execute();
+    $duprow2=$duplicate2->rowCount();
+    if($duprow1>0){
+      $errors[]="The username is already registerd create new one!!!";
+    }
+    if($duprow2>0){
+      $errors[]="The email is already exist, add new one!!!";
+    }
+    }
+  if (empty($errors)) {
+    $statement = $pdo->prepare("INSERT INTO users(username, email, name, age, password, created_date)
+              VALUES (:username , :email , :name , :age, :password,  :date)
             ");
 
     $statement->bindValue(':username', $username);
@@ -53,10 +68,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $statement->bindValue(':name', $name);
     $statement->bindValue(':age', $age);
     $statement->bindValue(':password', $password);
-    $statement->bindValue(':acc_type', $acc_type);
     $statement->bindValue(':date', $date);
     $statement->execute();
-    header("location:../index.php");
+    header("location:../");
   }
 }
 ?>

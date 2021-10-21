@@ -23,7 +23,7 @@ if (!isset($_SESSION['admin_id'])) {
 
 <body>
     <nav class="conatiner">
-        <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+        <nav class="navbar navbar-expand-lg navbar-light bg-danger  ">
             <a class="navbar-brand mx-md-4" href="../">STORE</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -47,6 +47,40 @@ if (!isset($_SESSION['admin_id'])) {
     <div class="conatiner d-flex justify-content-center mt-md-5">
       <h3 style='text-transform:capitalize'>Welcome <b><?php echo $_SESSION["username"]; ?></b> to Admin Panel</h3>
     </div>
+    <div class="container mt-3 d-flex flex-wrap">
+        <div class="m-4 ">
+          <div class="card" style="width:30rem; height:20rem;">
+            
+            <div class="card-body ">
+              <img src="images/admin.png" alt="admin-logo" class="card-img-top" style="height:85%">
+              <h4 class="card-username ">Admin Users</h4>
+              <p class="card-text">View and add/delete admin users</p>
+              <a href="#" class="stretched-link" ></a>
+            </div>
+          </div>
+        </div>
+        <div class="m-4 ">
+          <div class="card" style="width:30rem; height:20rem;">
+            <div class="card-body">
+              <img src="images/users.png" alt="admin-logo" class="card-img-top" style="height:85%; "> 
+              <h4 class="card-username">Users</h4>
+              <p class="card-text">View users and active/deactive them</p>
+              <a href="#" class="stretched-link"></a>
+            </div>
+          </div>
+        </div>
+        <div class="m-4 ">
+          <div class="card" style="width:30rem; height:20rem;">
+            
+            <div class="card-body">
+              <img src="images/app.png" alt="admin-logo" class="card-img-top" style="height:85%; "> 
+              <h4 class="card-username">Apps</h4>
+              <p class="card-text">View all apps</p>
+              <a href="#" class="stretched-link"></a>
+            </div>
+          </div>
+        </div>
+      </div>
     <script src="../js/jquery.js"></script>
     <script src="../js/bootstrap4.js"></script>
 </body>

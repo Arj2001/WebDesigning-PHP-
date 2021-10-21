@@ -54,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if($duprow1>0){
     $errors[]="The username is already registerd create new one!!!";
   }
-  
   if($duprow2>0){
     $errors[]="The email is already exist, add new one!!!";
   }

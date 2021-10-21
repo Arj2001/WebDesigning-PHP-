@@ -61,7 +61,7 @@
   </head>
   <body>
     <nav class="conatiner">
-    <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+    <nav class="navbar navbar-expand-lg navbar-light bg-danger">
         <a class="navbar-brand mx-md-4" href="../">STORE</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -72,9 +72,9 @@
             <li class="nav-item font-weight-bold text-size mx-md-1">
             <a class="nav-link" href="#">About</a>
             </li>
-            <li class="nav-item font-weight-bold text-size mx-md-1">
+            <!-- <li class="nav-item font-weight-bold text-size mx-md-1">
             <a class="nav-link" style="cursor: pointer;" href="register.php">Register</a>
-            </li>
+            </li> -->
         </ul>    
         </div>  
     </nav>
@@ -96,7 +96,7 @@
           <input class="form-control" type="text" name="username" value="<?php echo $username; ?>">
           <label class="my-2">Password</label>
           <input type="password" class="form-control" name="password" value="<?php echo $password; ?>">
-          <button type="submit" name="login" class="btn btn-warning d-block mx-auto mt-3">Login</button>
+          <button type="submit" name="login" class="btn btn-danger d-block mx-auto mt-3">Login</button>
         </form>    
       </div>
     </div>
