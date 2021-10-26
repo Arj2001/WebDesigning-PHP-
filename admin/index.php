@@ -76,7 +76,7 @@ if (!isset($_SESSION['admin_id'])) {
               <img src="images/app.png" alt="admin-logo" class="card-img-top" style="height:85%; "> 
               <h4 class="card-username">Apps</h4>
               <p class="card-text">View all apps</p>
-              <a href="#" class="stretched-link"></a>
+              <a href="app/index.php" class="stretched-link"></a>
             </div>
           </div>
         </div>
