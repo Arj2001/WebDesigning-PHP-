@@ -1,7 +1,13 @@
 <?php
 
 require_once('../../config.php');
-
+$statement = $pdo->prepare("SELECT * FROM apps ORDER BY id ");
+$statement->execute();
+$apps = $statement->fetchAll(PDO::FETCH_ASSOC);
+// echo "<pre>";
+// var_dump($apps);
+// echo "</pre>";
+// exit;
 ?>
 <!doctype html>
 <html lang="en">
@@ -45,6 +51,56 @@ require_once('../../config.php');
     </div>
     <div class='pt-5 text-md-right'>
       <a href='upload.php' class='btn btn-success'>Upload New</a>
+    </div>
+    <div class="table-responsive my-md-4">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Icon</th>
+            <th scope="col">Desc1</th>
+            <th scope="col">Desc2</th>
+            <th scope="col">Price</th>
+            <th scope="col">Free</th>
+            <th scope="col">File</th>
+            <th scope="col">Size</th>
+            <th scope="col">Version</th>
+            <th scope="col">Created Date</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($apps as $i => $apps) { ?>
+            <!--: ?> -->
+
+            <tr>
+              <th scope="row"><?php echo $i + 1 ?></th>
+              <td><?php echo $apps['id'] ?></td>
+              <td><?php echo $apps['name'] ?></td>
+              <td><img src="<?php echo $apps['icon'] ?>" style="width:40px;"></td>
+              <td><?php echo $apps['small_desc'] ?></td>
+              <td><?php echo $apps['desc'] ?></td>
+              <td><?php echo $apps['price'] ?></td>
+              <td><?php echo $apps['free'] ?></td>
+              <td><a href="<?php echo $apps['file']; ?>" download="<?php echo $apps['file']; ?>" class="download_link"><i class="fa fa-download "></i>Download</a></td>
+              <td><?php echo $apps['size'] ?></td>
+              <td><?php echo $apps['version'] ?></td>
+              <td><?php echo $apps['date'] ?></td>
+              <td>
+                <a href="update.php?id=<?php echo $apps['id'] ?>" type="button" class="btn btn-sm btn-primary">Edit</a>
+                <form style="display: inline-block;" method="post" action="delete.php">
+                  <input type="hidden" value="<?php echo $apps['id'] ?>" name="id">
+                  <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
+              </td>
+
+            </tr>
+          <?php } ?>
+          <!-- endforeach; apps -->
+        </tbody>
+      </table>
     </div>
   </div>
   <script src="js/jquery.js"></script>
