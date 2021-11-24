@@ -1,16 +1,24 @@
 <?php
 
-// require_once('../../config.php');
-$conn=mysqli_connect("localhost","root","","store");
-$name = '';
-$small_desc = '';
-$desc = '';
-$price = '';
-$version = '';
+require_once('../../config.php');
+$id = $_GET['id'] ?? null;
+
+if (!$id) {
+    header('location:index.php');
+    exit;
+}
+
+$statement = $pdo->prepare('SELECT  * FROM apps WHERE  id= :id');
+$statement->bindValue(':id', $id);
+$statement->execute();
+$apps = $statement->fetch(PDO::FETCH_ASSOC);
+
+$name = $apps['name'];
+$small_desc = $apps['small_desc'];
+$desc = $apps['desc'];
+$price = $apps['price'];
+$version = $apps['version'];
 $errors = [];
-$id=mysqli_insert_id($conn);
-echo $id;
-exit;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // echo '<pre>';
     // var_dump($_FILES['icon']);
@@ -63,8 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //   echo $iconPath."<br>";
         //   echo $filePath;
         //   exit;
-        $statement = $pdo->prepare("INSERT INTO `apps` (name, `icon`, `small_desc`, `desc`, `price`, `free`, `file`, `size`, `version`, `date`) VALUES (:name, :icon , :small_desc, :desc, :price, :free, :file, :size, :version, :date)
-          ");
+        $statement = $pdo->prepare("UPDATE  `apps` SET name = :name, icon = :icon, small_dec =:small_desc, desc =:desc, price = :price, free=:free, file=:file, size =:size, version=:version ");
         $statement->bindValue(':name', $name);
         $statement->bindValue(':icon', $iconPath);
         $statement->bindValue(':small_desc', $small_desc);
@@ -74,9 +81,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $statement->bindValue(':file', $filePath);
         $statement->bindValue(':size', $size);
         $statement->bindValue(':version', $version);
-        $statement->bindValue(':date', $date);
         $statement->execute();
-
+        echo "success";
+        exit;
         header("location:index.php");
     }
 }
@@ -120,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </nav>
     <div class="container">
         <div class="conatiner  mt-md-5">
-            <h3 style='text-transform:capitalize'>Upload New</h3>
+            <h3 style='text-transform:capitalize'>Update</h3>
         </div>
         <div class="container-fluid">
             <div class='pt-5 text-md-right'>
@@ -136,12 +143,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form action="" method='post' enctype="multipart/form-data">
                 <div class="form-group">
                     <label class="text-size" for="name">Enter the name of app:</label>
-                    <input type="text" class="form-control" id="name" value="<?php echo $name; ?>"name="name" style="width: 45%;" required>
+                    <input type="text" class="form-control" id="name" value="<?php echo $name; ?>" name="name" style="width: 45%;" required>
+                </div>
+                <div class="mb-3">
+                    <img src="<?php echo $apps['icon'] ?>" >
                 </div>
                 <div class="form-group">
-                    <label class="text-size" for="icon">Upload the icon for the app:</label>
+                    <label class="text-size" for="icon">Update the icon for the app:</label>
                     <br>
-                    <input type="file" id="icon" name="icon" value="<?php echo $icon; ?>" style="width: 45%;" required>
+                    <input type="file" id="icon" name="icon"  style="width: 45%;" >
                 </div>
 
                 <div class="form-group">
@@ -158,10 +168,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label class="text-size">Is the app paid:</label>
                     <div class=" form-check-inline">
                         <label class="form-check-label">
-                            <input type="radio" class="form-check-input" id="free" name="free" value="1" required>Yes
+                            <input type="radio" class="form-check-input" id="free" name="free" value="1" <?php if ($apps['free'] == 1) echo "checked" ?> required>Yes
                         </label>
                         <label class="form-check-label ml-1">
-                            <input type="radio" class="form-check-input" id="free1" name="free" value="0" required>No
+                            <input type="radio" class="form-check-input" id="free1" name="free" value="0" <?php if ($apps['free'] == 0) echo "checked" ?> required>No
                         </label>
                     </div>
                 </div>

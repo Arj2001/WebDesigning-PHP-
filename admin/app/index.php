@@ -83,7 +83,7 @@ $apps = $statement->fetchAll(PDO::FETCH_ASSOC);
               <td><?php echo $apps['small_desc'] ?></td>
               <td><?php echo $apps['desc'] ?></td>
               <td><?php echo $apps['price'] ?></td>
-              <td><?php echo $apps['free'] ?></td>
+              <td><?php if ($apps['free']==1) echo "No"; else echo "Yes" ?></td>
               <td><a href="<?php echo $apps['file']; ?>" download="<?php echo $apps['file']; ?>" class="download_link"><i class="fa fa-download "></i>Download</a></td>
               <td><?php echo $apps['size'] ?></td>
               <td><?php echo $apps['version'] ?></td>
