@@ -11,3 +11,16 @@ function randomString($n)
 
   return $str;
 }
+function removeDir($path){
+  $it = new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS);
+  $files = new RecursiveIteratorIterator($it,
+               RecursiveIteratorIterator::CHILD_FIRST);
+  foreach($files as $file) {
+      if ($file->isDir()){
+          rmdir($file->getRealPath());
+      } else {
+          unlink($file->getRealPath());
+      }
+  }
+  rmdir($path);
+}
