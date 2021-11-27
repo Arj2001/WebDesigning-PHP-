@@ -1,17 +1,15 @@
 <?php
-
-// require_once('../../config.php');
-$conn=mysqli_connect("localhost","root","","store");
+ require_once('../../config.php');
+ require_once('../../function.php');
 $name = '';
 $small_desc = '';
 $desc = '';
 $price = '';
 $version = '';
 $errors = [];
-$id=mysqli_insert_id($conn);
-echo $id;
-exit;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // echo "working ";
+    
     // echo '<pre>';
     // var_dump($_FILES['icon']);
     // echo '</pre>';
@@ -21,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // exit;
     //  echo 'start';
     $icon = $_FILES['icon'];
+    // echo "work2";
+    
     $file = $_FILES['file'];
     $name = $_POST['name'];
     $small_desc = $_POST['small_desc'];
@@ -30,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // echo $size;
     // exit;
     $date = date('Y-m-d H:i:s');
+    
     if ($_POST['free'] == '1') {
         if (!empty($_POST['price']))
             $price = $_POST['price'];
@@ -37,33 +38,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = "Price not inserted";
     } else $price = 0;
     $free = $_POST['free'];
-
+    while(1==1){
+    $folderName='../../apps/' . randomString(10);
+    if(is_dir($folderName)){
+        continue;
+    }else
+    break;
+    }
 
     if (empty($errors)) {
-        if (!is_dir('../../apps/' . $name)) {
-            mkdir('../../apps/' . $name);
-            mkdir('../../apps/' . $name . '/images');
+        if (!is_dir( $folderName)) {
+            mkdir( $folderName);
+            mkdir( $folderName . '/images');
         }
         $iconPath = '';
         if ($icon && $icon['tmp_name']) {
 
-            $iconPath = '../../apps/' . $name . '/images/' . $icon['name'];
-            if (!is_dir($iconPath))
-                mkdir(dirname($iconPath));
+            $iconPath =  $folderName . '/images/' . $icon['name'];
+            if (!is_dir($iconPath)){
+                mkdir(dirname($iconPath)); }
             move_uploaded_file($icon['tmp_name'], $iconPath);
         }
         $filePath = '';
         if ($file && $file['tmp_name']) {
 
-            $filePath = '../../apps/' . $name . '/' . $file['name'];
-            if (!is_dir($filePath))
-                mkdir(dirname($filePath));
+            $filePath =  $folderName . '/' . $file['name'];
+            if (!is_dir($filePath)){
+                mkdir(dirname($filePath)); }
             move_uploaded_file($file['tmp_name'], $filePath);
         }
         //   echo $iconPath."<br>";
         //   echo $filePath;
         //   exit;
-        $statement = $pdo->prepare("INSERT INTO `apps` (name, `icon`, `small_desc`, `desc`, `price`, `free`, `file`, `size`, `version`, `date`) VALUES (:name, :icon , :small_desc, :desc, :price, :free, :file, :size, :version, :date)
+        $statement = $pdo->prepare("INSERT INTO `apps` (name, `icon`, `small_desc`, `desc`, `price`, `free`, `file`, `size`, `version`, `date`, `dir`) VALUES (:name, :icon , :small_desc, :desc, :price, :free, :file, :size, :version, :date, :dir)
           ");
         $statement->bindValue(':name', $name);
         $statement->bindValue(':icon', $iconPath);
@@ -75,11 +82,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $statement->bindValue(':size', $size);
         $statement->bindValue(':version', $version);
         $statement->bindValue(':date', $date);
+        $statement->bindValue(':dir', $folderName);
         $statement->execute();
 
         header("location:index.php");
     }
 }
+
 
 ?>
 <!doctype html>

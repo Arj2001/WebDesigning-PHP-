@@ -12,12 +12,18 @@ $statement = $pdo->prepare('SELECT  * FROM apps WHERE  id= :id');
 $statement->bindValue(':id', $id);
 $statement->execute();
 $apps = $statement->fetch(PDO::FETCH_ASSOC);
-
+// echo "<pre>";
+// var_dump($apps);
+// echo "</pre>";
+// exit;
+$filePath=$apps['file'];
+$iconPath=$apps['icon'];
 $name = $apps['name'];
 $small_desc = $apps['small_desc'];
 $desc = $apps['desc'];
 $price = $apps['price'];
 $version = $apps['version'];
+$floderName=$apps['dir'];
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // echo '<pre>';
@@ -48,14 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     if (empty($errors)) {
-        if (!is_dir('../../apps/' . $name)) {
-            mkdir('../../apps/' . $name);
-            mkdir('../../apps/' . $name . '/images');
-        }
+
         $iconPath = '';
         if ($icon && $icon['tmp_name']) {
 
-            $iconPath = '../../apps/' . $name . '/images/' . $icon['name'];
+            $iconPath = $floderName.'/images/' . $icon['name'];
             if (!is_dir($iconPath))
                 mkdir(dirname($iconPath));
             move_uploaded_file($icon['tmp_name'], $iconPath);
@@ -63,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $filePath = '';
         if ($file && $file['tmp_name']) {
 
-            $filePath = '../../apps/' . $name . '/' . $file['name'];
+            $filePath = $floderName. '/' . $file['name'];
             if (!is_dir($filePath))
                 mkdir(dirname($filePath));
             move_uploaded_file($file['tmp_name'], $filePath);
@@ -71,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //   echo $iconPath."<br>";
         //   echo $filePath;
         //   exit;
-        $statement = $pdo->prepare("UPDATE  `apps` SET name = :name, icon = :icon, small_dec =:small_desc, desc =:desc, price = :price, free=:free, file=:file, size =:size, version=:version ");
+        $statement = $pdo->prepare("UPDATE  `apps` SET name = :name, icon = :icon, `small_desc` =:small_desc, `desc` =:desc, price = :price, free=:free, file=:file, size =:size, version=:version ");
         $statement->bindValue(':name', $name);
         $statement->bindValue(':icon', $iconPath);
         $statement->bindValue(':small_desc', $small_desc);
@@ -83,8 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $statement->bindValue(':version', $version);
         $statement->execute();
         echo "success";
-        exit;
         header("location:index.php");
+        exit;
     }
 }
 
