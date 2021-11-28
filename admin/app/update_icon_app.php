@@ -16,6 +16,7 @@ $apps = $statement->fetch(PDO::FETCH_ASSOC);
 $filePath = $apps['file'];
 $iconPath = $apps['icon'];
 $floderName = $apps['dir'];
+
 $errors = [];
 if (isset($_POST['icon'])) {
 
@@ -24,11 +25,12 @@ if (isset($_POST['icon'])) {
     if ($icon && $icon['tmp_name']) {
 
         $iconPath = $floderName . '/images/' . $icon['name'];
-       
+        // die("$iconPath");
         move_uploaded_file($icon['tmp_name'], $iconPath);
     }
 
-    $statement = $pdo->prepare("UPDATE  `apps` SET  icon = :icon");
+    $statement = $pdo->prepare("UPDATE  `apps` SET  icon = :icon where id=:id");
+    $statement->bindValue(':id', $id);
     $statement->bindValue(':icon', $iconPath);
     $statement->execute();
 }
@@ -42,7 +44,8 @@ if (isset($_POST['file'])) {
        
         move_uploaded_file($file['tmp_name'], $filePath);
     }
-    $statement = $pdo->prepare("UPDATE  `apps` SET  size =:size, file=:file ");
+    $statement = $pdo->prepare("UPDATE  `apps` SET  size =:size, file=:file where id=:id");
+    $statement->bindValue(':id', $id);
     $statement->bindValue(':file', $filePath);
     $statement->bindValue(':size', $size);
     $statement->execute();

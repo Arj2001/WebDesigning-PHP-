@@ -39,7 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
 
-        $statement = $pdo->prepare("UPDATE  `apps` SET name = :name,  `small_desc` =:small_desc, `desc` =:desc, price = :price, free=:free,  version=:version ");
+        $statement = $pdo->prepare("UPDATE  `apps` SET name = :name,  `small_desc` =:small_desc, `desc` =:desc, price = :price, free=:free,  version=:version where id=:id");
+        $statement->bindValue(':id', $id);
         $statement->bindValue(':name', $name);
         $statement->bindValue(':small_desc', $small_desc);
         $statement->bindValue(':desc', $desc);
