@@ -12,77 +12,39 @@ $statement = $pdo->prepare('SELECT  * FROM apps WHERE  id= :id');
 $statement->bindValue(':id', $id);
 $statement->execute();
 $apps = $statement->fetch(PDO::FETCH_ASSOC);
-// echo "<pre>";
-// var_dump($apps);
-// echo "</pre>";
-// exit;
-$filePath=$apps['file'];
-$iconPath=$apps['icon'];
+
 $name = $apps['name'];
 $small_desc = $apps['small_desc'];
 $desc = $apps['desc'];
 $price = $apps['price'];
 $version = $apps['version'];
-$floderName=$apps['dir'];
+$floderName = $apps['dir'];
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // echo '<pre>';
-    // var_dump($_FILES['icon']);
-    // echo '</pre>';
-    // echo '<pre>';
-    // var_dump($_FILES['file']);
-    // echo '</pre>';
-    // exit;
-    //  echo 'start';
-    $icon = $_FILES['icon'];
-    $file = $_FILES['file'];
+
     $name = $_POST['name'];
     $small_desc = $_POST['small_desc'];
-    $desc = $_POST['desc'];
+    $desc= $_POST['desc'];
     $version = $_POST['version'];
-    $size = $_FILES['file']['size'];
-    // echo $size;
-    // exit;
+
     $date = date('Y-m-d H:i:s');
     if ($_POST['free'] == '1') {
-        if (!empty($_POST['price']))
-            $price = $_POST['price'];
-        else
+        if (empty($_POST['price']) || $_POST['price'] == 0)
             $errors[] = "Price not inserted";
+        else
+            $price = $_POST['price'];
     } else $price = 0;
     $free = $_POST['free'];
 
 
     if (empty($errors)) {
 
-        $iconPath = '';
-        if ($icon && $icon['tmp_name']) {
-
-            $iconPath = $floderName.'/images/' . $icon['name'];
-            if (!is_dir($iconPath))
-                mkdir(dirname($iconPath));
-            move_uploaded_file($icon['tmp_name'], $iconPath);
-        }
-        $filePath = '';
-        if ($file && $file['tmp_name']) {
-
-            $filePath = $floderName. '/' . $file['name'];
-            if (!is_dir($filePath))
-                mkdir(dirname($filePath));
-            move_uploaded_file($file['tmp_name'], $filePath);
-        }
-        //   echo $iconPath."<br>";
-        //   echo $filePath;
-        //   exit;
-        $statement = $pdo->prepare("UPDATE  `apps` SET name = :name, icon = :icon, `small_desc` =:small_desc, `desc` =:desc, price = :price, free=:free, file=:file, size =:size, version=:version ");
+        $statement = $pdo->prepare("UPDATE  `apps` SET name = :name,  `small_desc` =:small_desc, `desc` =:desc, price = :price, free=:free,  version=:version ");
         $statement->bindValue(':name', $name);
-        $statement->bindValue(':icon', $iconPath);
         $statement->bindValue(':small_desc', $small_desc);
         $statement->bindValue(':desc', $desc);
         $statement->bindValue(':price', $price);
         $statement->bindValue(':free', $free);
-        $statement->bindValue(':file', $filePath);
-        $statement->bindValue(':size', $size);
         $statement->bindValue(':version', $version);
         $statement->execute();
         echo "success";
@@ -137,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <a href='index.php' class='btn btn-info'>Back</a>
             </div>
             <?php if (!empty($errors)) : ?>
-                <div class="alert alert-danger">
+                <div class="alert alert-danger m-2">
                     <?php foreach ($errors as $error) : ?>
                         <?php echo $error ?><br>
                     <?php endforeach; ?>
@@ -145,30 +107,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
             <form action="" method='post' enctype="multipart/form-data">
                 <div class="form-group">
-                    <label class="text-size" for="name">Enter the name of app:</label>
+                    <a href="update_icon_app.php?id=<?php echo $apps['id'] ?>" class="text-size">Update the Icon and Software</a>
+                </div>
+                <div class="form-group">
+                    <label class="text-size" for="name">Enter the name of Software:</label>
                     <input type="text" class="form-control" id="name" value="<?php echo $name; ?>" name="name" style="width: 45%;" required>
                 </div>
-                <div class="mb-3">
-                    <img src="<?php echo $apps['icon'] ?>" >
-                </div>
                 <div class="form-group">
-                    <label class="text-size" for="icon">Update the icon for the app:</label>
-                    <br>
-                    <input type="file" id="icon" name="icon"  style="width: 45%;" >
-                </div>
-
-                <div class="form-group">
-                    <label class="text-size" for="small_desc">Give a small description about the app(Little but effective):</label>
+                    <label class="text-size" for="small_desc">Give a small description about the Software(Little but effective):</label>
                     <input type="text" class="form-control" id="small_desc" value="<?php echo $small_desc; ?>" name="small_desc" style="width: 45%;" required>
                 </div>
                 <div class="form-group">
                     <label class="text-size" for="desc">Give an elbroate descripation about the app:</label>
-                    <textarea rows='5' class="form-control" id="desc" name="desc" style="width: 70%;" required>
+                    <textarea rows='10' class="form-control" id="desc" name="desc" style="width: 70%;" required>
                     <?php echo $desc; ?>
                     </textarea>
                 </div>
                 <div class="from-group">
-                    <label class="text-size">Is the app paid:</label>
+                    <label class="text-size">Is the software paid:</label>
                     <div class=" form-check-inline">
                         <label class="form-check-label">
                             <input type="radio" class="form-check-input" id="free" name="free" value="1" <?php if ($apps['free'] == 1) echo "checked" ?> required>Yes
@@ -183,14 +139,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="number" class="form-control" step="0.01" name="price" value="<?php echo $price; ?>" style="width: 45%;">
                 </div>
                 <div class="form-group">
-                    <label class="text-size" for="file">Upload the app file(Should be .exe or zip file):</label><br>
-                    <input type="file" class="" id="file" name="file" style="width: 45%;" required>
-                </div>
-                <div class="form-group">
-                    <label class="text-size" for="version">What version is this app</label>
+                    <label class="text-size" for="version">What version is this Software</label>
                     <input type="text" class="form-control" id="version" name="version" value="<?php echo $version; ?>" style="width: 45%;" required>
                 </div>
-                <button type="submit" name="upload" class="btn btn-primary">Upload</button>
+                <button type="submit" name="upload" class="btn btn-primary">Save</button>
             </form>
         </div>
     </div>
@@ -208,6 +160,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $("#price").hide();
             });
         });
+    </script>
+    <script src="../../ckeditor/build/ckeditor.js"></script>
+    <script>
+        ClassicEditor
+            .create(document.querySelector('#desc'), {
+
+                licenseKey: '',
+
+
+
+            })
+            .then(editor => {
+                window.editor = editor;
+
+
+
+
+            })
+            .catch(error => {
+                console.error('Oops, something went wrong!');
+                console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+                console.warn('Build id: d1pxjkepsyns-8ek9xs5l5res');
+                console.error(error);
+            });
     </script>
 </body>
 </hmtl>

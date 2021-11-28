@@ -159,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="form-group">
                     <label class="text-size" for="desc">Give an elbroate descripation about the app:</label>
-                    <textarea rows='5' class="form-control" id="desc" name="desc" style="width: 70%;" required>
+                    <textarea  rows='10' class="form-control" id="desc" name="desc" style="width: 70%;" required>
                     <?php echo $desc; ?>
                     </textarea>
                 </div>
@@ -204,6 +204,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $("#price").hide();
             });
         });
+    </script>
+    <script src="../../ckeditor/build/ckeditor.js"></script>
+    <script>
+     ClassicEditor
+				.create( document.querySelector( '#desc' ), {
+					
+					licenseKey: '',
+					
+					
+					
+				} )
+				.then( editor => {
+					window.editor = editor;
+			
+					
+					
+					
+				} )
+				.catch( error => {
+					console.error( 'Oops, something went wrong!' );
+					console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
+					console.warn( 'Build id: d1pxjkepsyns-8ek9xs5l5res' );
+					console.error( error );
+				} );
     </script>
 </body>
 </hmtl>

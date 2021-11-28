@@ -60,8 +60,8 @@ $apps = $statement->fetchAll(PDO::FETCH_ASSOC);
             <th scope="col">Id</th>
             <th scope="col">Name</th>
             <th scope="col">Icon</th>
-            <th scope="col">Desc1</th>
-            <th scope="col">Desc2</th>
+            <th scope="col">Comment</th>
+            <th scope="col">Description</th>
             <th scope="col">Price</th>
             <th scope="col">Free</th>
             <th scope="col">File</th>
@@ -81,7 +81,7 @@ $apps = $statement->fetchAll(PDO::FETCH_ASSOC);
               <td><?php echo $apps['name'] ?></td>
               <td><img src="<?php echo $apps['icon'] ?>" style="width:40px;"></td>
               <td><?php echo $apps['small_desc'] ?></td>
-              <td><?php echo $apps['desc'] ?></td>
+              <td><a href="view.php?id=<?php echo $apps['id'] ?>">View</a></td>
               <td><?php echo $apps['price'] ?></td>
               <td><?php if ($apps['free']==1) echo "No"; else echo "Yes" ?></td>
               <td><a href="<?php echo $apps['file']; ?>" download="<?php echo $apps['file']; ?>" class="download_link"><i class="fa fa-download "></i>Download</a></td>
