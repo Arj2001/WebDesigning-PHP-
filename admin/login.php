@@ -1,6 +1,6 @@
 <?php
   session_start();
-  $username = '';
+  $uname = '';
   $password = '';
   $pdo = new PDO('mysql:host=localhost;port=3306;dbname=store', 'root', '');
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -8,27 +8,27 @@
   $errors = [];
   
   if(isset($_POST['login'])){
-    $username=$_POST['username'];
+    $uname=$_POST['uname'];
     $password=$_POST['password'];
-    if (!$username) {
+    if (!$uname) {
       $errors[] = 'Username is Needed!!!';
     }
     if(!$password){
       $errors[] ="Password is Needed!!!";
     }
     if(empty($errors)){
-      $statement=$pdo->prepare("SELECT * FROM admin WHERE username = :username AND password = :password");
-      $statement->bindValue(':username',$username);
+      $statement=$pdo->prepare("SELECT * FROM admin WHERE uname = :uname AND password = :password");
+      $statement->bindValue(':uname',$uname);
       $statement->bindValue(':password',$password);
       $statement->execute(array(  
-        'username'     =>     $_POST["username"],  
+        'uname'     =>     $_POST["uname"],  
         'password'     =>     $_POST["password"]  
           )  );
       $count=$statement->rowCount();
       if($count > 0)  
         {   
-            $statement2 = $pdo->prepare('SELECT * FROM admin WHERE username = :username');
-            $statement2->bindValue(':username',$username);
+            $statement2 = $pdo->prepare('SELECT * FROM admin WHERE uname = :uname');
+            $statement2->bindValue(':uname',$uname);
             $statement2->execute();
             $admin=$statement2->fetch(PDO::FETCH_ASSOC);  
             $_SESSION=$admin;
@@ -40,7 +40,7 @@
         }  
         else  
         {  
-          $errors[]="Username or Password is incorrect!!" ;
+          $errors[]="Uname or Password is incorrect!!" ;
         }  
     }
   }
@@ -93,10 +93,10 @@
         <?php endif; ?>             
         <form action="" method="POST">
           <label class="my-2">Username</label>
-          <input class="form-control" type="text" name="username" value="<?php echo $username; ?>">
+          <input class="form-control" type="text" name="uname" value="<?php echo $uname; ?>">
           <label class="my-2">Password</label>
           <input type="password" class="form-control" name="password" value="<?php echo $password; ?>">
-          <button type="submit" name="login" class="btn btn-danger d-block mx-auto mt-3">Login</button>
+          <button type="submit" name="login" formtarget="_blank" class="btn btn-danger d-block mx-auto mt-3">Login</button>
         </form>    
       </div>
     </div>

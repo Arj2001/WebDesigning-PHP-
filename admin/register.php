@@ -5,23 +5,23 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 $errors = [];
 $name = '';
-$username = '';
+$uname = '';
 $email = '';
 $age = '';
 $password = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
-  $username = $_POST['username'];
+  $uname = $_POST['uname'];
   $email = $_POST['email'];
   $name = $_POST['name'];
   $age = $_POST['age'];
   $password = $_POST['password'];
   $date = date('Y-m-d H:i:s');
 
-  if (!$username) {
+  if (!$uname) {
     $errors[] = 'Username is Needed!!!';
-  }else if(!ctype_alnum($username)){
+  }else if(!ctype_alnum($uname)){
     $errors[] = 'Username should be alphanumeric!!!';
   }
   if (!$name) {
@@ -43,8 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $errors[] ="Password should be 8 characters or more!!!";
   }
   if (empty($errors)) {
-  $duplicate1=$pdo->prepare("SELECT * FROM admin WHERE username = :username");
-  $duplicate1->bindValue(':username',$username);
+  $duplicate1=$pdo->prepare("SELECT * FROM admin WHERE usename = :uname");
+  $duplicate1->bindValue(':uname',$uname);
   $duplicate1->execute();
   $duprow1=$duplicate1->rowCount();
   $duplicate2=$pdo->prepare("SELECT * FROM admin WHERE email = :email");
@@ -59,11 +59,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
   }
   if (empty($errors)) {
-    $statement = $pdo->prepare("INSERT INTO admin(username, email, name, age, password, created_date)
-              VALUES (:username , :email , :name , :age, :password,  :date)
+    $statement = $pdo->prepare("INSERT INTO admin(uname, email, name, age, password, created_date)
+              VALUES (:uname , :email , :name , :age, :password,  :date)
             ");
 
-    $statement->bindValue(':username', $username);
+    $statement->bindValue(':uname', $uname);
     $statement->bindValue(':email', $email);
     $statement->bindValue(':name', $name);
     $statement->bindValue(':age', $age);
@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <label class="my-2 ">Name</label>
       <input class="form-control" type="text" name="name" value="<?php echo $name; ?>">
       <label class="my-2">Username</label>
-      <input class="form-control" type="text" name="username" value="<?php echo $username; ?>">
+      <input class="form-control" type="text" name="uname" value="<?php echo $uname; ?>">
       <label class="my-2">Password</label>
       <input type="password" class="form-control" name="password" value="<?php echo $password; ?>">
       <label class="my-2">Age</label>

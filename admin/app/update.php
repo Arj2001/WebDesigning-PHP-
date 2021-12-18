@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once('../../config.php');
 $id = $_GET['id'] ?? null;
 
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a class="nav-link" href="#">About</a>
                     </li>
                     <li class="nav-item font-weight-bold text-size mx-md-1">
-                        <a class="nav-link" style="cursor: pointer;" href="#"><?php echo $_SESSION["username"]; ?></a>
+                        <a class="nav-link" style="cursor: pointer;" href="#"><?php echo $_SESSION["uname"]; ?></a>
                     </li>
                     <li class="nav-item font-weight-bold text-size mx-md-1">
                         <a class="nav-link" style="cursor: pointer;" href="logout.php">Logout</a>

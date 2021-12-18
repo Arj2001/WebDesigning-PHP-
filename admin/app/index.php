@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 require_once('../../config.php');
 $statement = $pdo->prepare("SELECT * FROM apps ORDER BY id ");
 $statement->execute();
@@ -36,7 +36,7 @@ $apps = $statement->fetchAll(PDO::FETCH_ASSOC);
             <a class="nav-link" href="#">About</a>
           </li>
           <li class="nav-item font-weight-bold text-size mx-md-1">
-            <a class="nav-link" style="cursor: pointer;" href="#"><?php echo $_SESSION["username"]; ?></a>
+            <a class="nav-link" style="cursor: pointer;" href="#"><?php echo $_SESSION["uname"]; ?></a>
           </li>
           <li class="nav-item font-weight-bold text-size mx-md-1">
             <a class="nav-link" style="cursor: pointer;" href="logout.php">Logout</a>
