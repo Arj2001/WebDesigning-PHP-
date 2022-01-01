@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $name = $_POST['name'];
     $small_desc = $_POST['small_desc'];
-    $desc= $_POST['desc'];
+    $desc = $_POST['desc'];
     $version = $_POST['version'];
 
     $date = date('Y-m-d H:i:s');
@@ -106,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
-            <form action="" method='post' enctype="multipart/form-data">
+            <form action="" method='post' enctype="multipart/form-data" id="updateForm">
                 <div class="form-group">
                     <a href="update_icon_app.php?id=<?php echo $apps['id'] ?>" class="text-size">Update the Icon and Software</a>
                 </div>
@@ -154,6 +154,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script type="text/javascript">
         $(document).ready(function() {
             $("#price").hide();
+            if ($('input[name=free]:checked', '#updateForm').val() == 1) {
+                $("#price").show();
+            }
             $("#free").change(function() {
                 $("#price").show();
             });

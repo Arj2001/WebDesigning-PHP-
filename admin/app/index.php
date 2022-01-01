@@ -92,11 +92,11 @@ $apps = $statement->fetchAll(PDO::FETCH_ASSOC);
                 <a href="update.php?id=<?php echo $apps['id'] ?>" type="button" class="btn btn-sm btn-primary">Edit</a>
                 <form style="display: inline-block;" method="post" action="delete.php">
                   <input type="hidden" value="<?php echo $apps['id'] ?>" name="id">
-                  <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                  <button type="submit" onclick="if (!confirm('Are you sure you want to delete?(Warning: Cannot be undone!!!)')) { return false }" class="btn btn-sm btn-danger">Delete</button>
                 </form>
               </td>
 
-            </tr>
+             </tr>
           <?php } ?>
           <!-- endforeach; apps -->
         </tbody>

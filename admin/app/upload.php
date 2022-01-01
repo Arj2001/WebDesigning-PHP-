@@ -1,7 +1,7 @@
 <?php
 session_start();
- require_once('../../config.php');
- require_once('../../function.php');
+require_once('../../config.php');
+require_once('../../function.php');
 $name = '';
 $small_desc = '';
 $desc = '';
@@ -10,7 +10,7 @@ $version = '';
 $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // echo "working ";
-    
+
     // echo '<pre>';
     // var_dump($_FILES['icon']);
     // echo '</pre>';
@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     //  echo 'start';
     $icon = $_FILES['icon'];
     // echo "work2";
-    
+
     $file = $_FILES['file'];
     $name = $_POST['name'];
     $small_desc = $_POST['small_desc'];
@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // echo $size;
     // exit;
     $date = date('Y-m-d H:i:s');
-    
+
     if ($_POST['free'] == '1') {
         if (!empty($_POST['price']))
             $price = $_POST['price'];
@@ -39,33 +39,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errors[] = "Price not inserted";
     } else $price = 0;
     $free = $_POST['free'];
-    while(1==1){
-    $folderName='../../apps/' . randomString(10);
-    if(is_dir($folderName)){
-        continue;
-    }else
-    break;
+    while (1 == 1) {
+        $folderName = '../../apps/' . randomString(10);
+        if (is_dir($folderName)) {
+            continue;
+        } else
+            break;
     }
 
     if (empty($errors)) {
-        if (!is_dir( $folderName)) {
-            mkdir( $folderName);
-            mkdir( $folderName . '/images');
+        if (!is_dir($folderName)) {
+            mkdir($folderName);
+            mkdir($folderName . '/images');
         }
         $iconPath = '';
         if ($icon && $icon['tmp_name']) {
 
             $iconPath =  $folderName . '/images/' . $icon['name'];
-            if (!is_dir($iconPath)){
-                mkdir(dirname($iconPath)); }
+            if (!is_dir($iconPath)) {
+                mkdir(dirname($iconPath));
+            }
             move_uploaded_file($icon['tmp_name'], $iconPath);
         }
         $filePath = '';
         if ($file && $file['tmp_name']) {
 
             $filePath =  $folderName . '/' . $file['name'];
-            if (!is_dir($filePath)){
-                mkdir(dirname($filePath)); }
+            if (!is_dir($filePath)) {
+                mkdir(dirname($filePath));
+            }
             move_uploaded_file($file['tmp_name'], $filePath);
         }
         //   echo $iconPath."<br>";
@@ -143,15 +145,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
-            <form action="" method='post' enctype="multipart/form-data">
+            <form action="" method='post' enctype="multipart/form-data" id="uploadForm">
                 <div class="form-group">
                     <label class="text-size" for="name">Enter the name of app:</label>
-                    <input type="text" class="form-control" id="name" value="<?php echo $name; ?>"name="name" style="width: 45%;" required>
+                    <input type="text" class="form-control" id="name" value="<?php echo $name; ?>" name="name" style="width: 45%;" required>
                 </div>
                 <div class="form-group">
-                    <label class="text-size" for="icon">Upload the icon for the app:</label>
+                    <label class="text-size" for="icon">Upload the icon for the app(only png or jpg file):</label>
                     <br>
-                    <input type="file" id="icon" name="icon" value="<?php echo $icon; ?>" style="width: 45%;" required>
+                    <input type="file" accept=".jpg, .png" id="icon" name="icon" value="<?php echo $icon; ?>" style="width: 45%;" required>
                 </div>
 
                 <div class="form-group">
@@ -160,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="form-group">
                     <label class="text-size" for="desc">Give an elbroate descripation about the app:</label>
-                    <textarea  rows='10' class="form-control" id="desc" name="desc" style="width: 70%;" required>
+                    <textarea rows='10' class="form-control" id="desc" name="desc" style="width: 70%;" required>
                     <?php echo $desc; ?>
                     </textarea>
                 </div>
@@ -181,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
                 <div class="form-group">
                     <label class="text-size" for="file">Upload the app file(Should be .exe or zip file):</label><br>
-                    <input type="file" class="" id="file" name="file" style="width: 45%;" required>
+                    <input type="file" accept=".zip, .exe" id="file" name="file" style="width: 45%;" required>
                 </div>
                 <div class="form-group">
                     <label class="text-size" for="version">What version is this app</label>
@@ -195,6 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <br>
     <script src="../../js/jquery.js"></script>
     <script src="../../js/bootstrap4.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script> -->
     <script type="text/javascript">
         $(document).ready(function() {
             $("#price").hide();
@@ -205,30 +208,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $("#price").hide();
             });
         });
+        
     </script>
     <script src="../../ckeditor/build/ckeditor.js"></script>
     <script>
-     ClassicEditor
-				.create( document.querySelector( '#desc' ), {
-					
-					licenseKey: '',
-					
-					
-					
-				} )
-				.then( editor => {
-					window.editor = editor;
-			
-					
-					
-					
-				} )
-				.catch( error => {
-					console.error( 'Oops, something went wrong!' );
-					console.error( 'Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:' );
-					console.warn( 'Build id: d1pxjkepsyns-8ek9xs5l5res' );
-					console.error( error );
-				} );
+        ClassicEditor
+            .create(document.querySelector('#desc'), {
+
+                licenseKey: '',
+
+
+
+            })
+            .then(editor => {
+                window.editor = editor;
+
+
+
+
+            })
+            .catch(error => {
+                console.error('Oops, something went wrong!');
+                console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+                console.warn('Build id: d1pxjkepsyns-8ek9xs5l5res');
+                console.error(error);
+            });
     </script>
 </body>
 </hmtl>

@@ -1,7 +1,24 @@
 <?php
 
 session_start();
+require_once('config.php');
 
+$id = $_GET['id'] ?? null;
+
+if (!$id) {
+    header('location:index.php');
+    exit;
+}
+$stmt=$pdo->prepare("SELECT * FROM apps WHERE id = :id");
+$stmt->bindValue(':id',$id);
+$stmt->execute();
+$apps = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$ext = pathinfo($apps['file'], PATHINFO_EXTENSION);
+
+// echo "<pre>";
+// var_dump($ext);
+// exit;
 ?>
 <!doctype html>
 <html lang="en">
@@ -18,10 +35,10 @@ session_start();
   <title>STORE</title>
 </head>
 
-<body>
+<body onload="changeTag()">
   <nav class="conatiner">
     <nav class="navbar navbar-expand-lg navbar-light bg-warning">
-      <a class="navbar-brand mx-md-4" href="#">STORE</a>
+      <a class="navbar-brand mx-md-4" href="./">STORE</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -46,50 +63,32 @@ session_start();
                     </li>';
           }
           ?>
-      </div>
+      </div> 
     </nav>
   </nav>
-
-
-  <div class="conatiner d-flex justify-content-center mt-md-5">
-    <h1>Search Our STORE</h1>
-  </div>
-  <div class="container mt-5 py-5">
-
-    <form class="d-flex justify-content-center">
-      <input type="search" class="form-control" style="width:60%" placeholder="search..">
-      <button class="form-check-inline btn btn-dark" type="submit"><i class="fas fa-search"></i></button>
-    </form>
-
-  </div>
-  <div class="container">
-    <h2 class="text-center">OR</h2>
-    <h2 class="text-center">Try our Suggestions..</h2>
-    <?php
-    require_once('config.php');
-    $stmt = $pdo->prepare("SELECT * FROM apps ORDER BY rand() LIMIT 3");
-    $stmt->execute();
-    $apps = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // echo "<pre>";
-    // var_dump($apps);
-    // exit;
-    ?>
-    <div class="container mt-3 d-flex flex-wrap">
-      <?php foreach ($apps as $i => $apps) { ?>
-        <div class="m-4 ">
-          <div class="card" style="width:200px">
-            <img class="card-img-top" src="<?php echo str_replace("../../","",$apps['icon']) ?> " >
-            <div class="card-body">
-              <h5 class="card-username text-nowrap"><?php echo $apps['name'] ?></h5>
-              <!-- <p class="card-text text-nowrap"><?php echo $apps['small_desc'] ?></p> -->
-              <a href="apps.php?id=<?php echo $apps['id'] ?>" class="btn btn-primary stretched-link download_link">Download</a>
-            </div>
-          </div>
+   <div class="container my-4">
+        <div class="ctag">
+            <img src="<?php echo str_replace("../../","",$apps['icon']) ?>" class="img-rounded img-thumbnail" style="width:200px;" alt="app-image">
+            <?php echo $apps['desc']; ?>    
+            <a  href="<?php echo str_replace("../../","",$apps['file']) ?>" download="<?php echo $apps['name'].'.'.$ext; ?>" class="btn btn-success btn-lg"><i class="fa fa-download mx-1"></i>Download file</a> 
         </div>
-      <?php } ?>
-    </div>
-  </div>
-  <script src="js/jquery.js"></script>
+   </div>
+   <script src="js/jquery.js"></script>
   <script src="js/bootstrap4.js"></script>
+  <script>
+  function changeTag()
+    {
+        var els = document.querySelectorAll('.ctag h3');
+        console.log(els.length);
+        for (var i = 0; i < els.length ; i++) {
+            els[i].outerHTML = '<h4>' + els[i].innerHTML + '</h4>';
+        }
+        // var els = document.querySelectorAll('.ctag h2');
+        // console.log(els.length);
+        // for (var i = 0; i < els.length ; i++) {
+        //     els[i].outerHTML = '<h3>' + els[i].innerHTML + '</h3>';
+        // }
+    }
+  </script>
 </body>
 </html>
