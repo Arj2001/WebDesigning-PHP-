@@ -25,8 +25,9 @@
           )  );
       $count=$statement->rowCount();
       if($count > 0)  
-        {  
-            $_SESSION["username"] = $_POST["username"];  
+      {  
+            $_SESSION=$statement->fetch(PDO::FETCH_ASSOC);        
+            /* $_SESSION["username"] = $_POST["username"];  */ 
             header("location:../");  
         }  
         else  

@@ -56,8 +56,8 @@ session_start();
   </div>
   <div class="container mt-5 py-5">
 
-    <form class="d-flex justify-content-center">
-      <input type="search" class="form-control" style="width:60%" placeholder="search..">
+    <form method="get" action="search.php" class="d-flex justify-content-center">
+      <input type="search" name="search" class="form-control" style="width:60%" placeholder="search..">
       <button class="form-check-inline btn btn-dark" type="submit"><i class="fas fa-search"></i></button>
     </form>
 
@@ -81,8 +81,7 @@ session_start();
             <img class="card-img-top" src="<?php echo str_replace("../../","",$apps['icon']) ?> " >
             <div class="card-body">
               <h5 class="card-username text-nowrap"><?php echo $apps['name'] ?></h5>
-              <!-- <p class="card-text text-nowrap"><?php echo $apps['small_desc'] ?></p> -->
-              <a href="apps.php?id=<?php echo $apps['id'] ?>" class="btn btn-primary stretched-link download_link">Download</a>
+              <a href="apps.php?id=<?php echo $apps['id'] ?>" class="btn btn-outline-dark stretched-link download_link">Download</a>
             </div>
           </div>
         </div>
