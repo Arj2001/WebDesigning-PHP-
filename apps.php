@@ -36,9 +36,11 @@ $size = sizeConvert(filesize($filePath));
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap4.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  
   <title><?php echo $apps['name']; ?></title>
 </head>
 
@@ -59,7 +61,7 @@ $size = sizeConvert(filesize($filePath));
           <?php
           if (isset($_SESSION['username'])) {
             echo '<li class="nav-item font-weight-bold text-size mx-md-1">
-                    <a class="nav-link" style="cursor: pointer;" href="#">' . $_SESSION['username'] . '</a>
+                    <a class="nav-link" style="cursor: pointer;" href="profile.php">' . $_SESSION['username'] . '</a>
                   </li>';
             echo '<li class="nav-item font-weight-bold text-size mx-md-1">
                     <a class="nav-link" style="cursor: pointer;" href="logout.php">Logout</a>

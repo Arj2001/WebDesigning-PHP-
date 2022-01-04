@@ -1,5 +1,12 @@
 <?php
-
+session_start();
+if (!$_SESSION) {
+    echo '<script type="text/javascript">
+    alert("Your are doing an illegal entry please login to continue");
+    window.location.href="../index.php";
+    </script>';
+    exit;
+  }
 require_once('../../config.php');
 $id = $_GET['id'] ?? null;
 

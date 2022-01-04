@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
   </div>
 
-  <script src="../js/jquery.js"></script>
+  <script src="../js/jquery.min.js"></script>
   <script src="../js/bootstrap4.js"></script>
 </body>
 

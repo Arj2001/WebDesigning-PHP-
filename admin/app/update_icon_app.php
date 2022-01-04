@@ -1,5 +1,12 @@
 <?php
 session_start();
+if (!$_SESSION) {
+    echo '<script type="text/javascript">
+    alert("Your are doing an illegal entry please login to continue");
+    window.location.href="../index.php";
+    </script>';
+    exit;
+  }
 require_once('../../config.php');
 $id = $_GET['id'] ?? null;
 
@@ -82,7 +89,7 @@ if (isset($_POST['file'])) {
                         <a class="nav-link" style="cursor: pointer;" href="#"><?php echo $_SESSION["uname"]; ?></a>
                     </li>
                     <li class="nav-item font-weight-bold text-size mx-md-1">
-                        <a class="nav-link" style="cursor: pointer;" href="logout.php">Logout</a>
+                        <a class="nav-link" style="cursor: pointer;" href="../logout.php">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -121,7 +128,7 @@ if (isset($_POST['file'])) {
     </div>
     <br>
     <br>
-    <script src="../../js/jquery.js"></script>
+    <script src="../../js/jquery.min.js"></script>
     <script src="../../js/bootstrap4.js"></script>
     <!-- <script type="text/javascript">
         $(document).ready(function() {

@@ -41,7 +41,7 @@ $apps = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <?php
                     if (isset($_SESSION['username'])) {
                         echo '<li class="nav-item font-weight-bold text-size mx-md-1">
-                    <a class="nav-link" style="cursor: pointer;" href="#">' . $_SESSION['username'] . '</a>
+                    <a class="nav-link" style="cursor: pointer;" href="profile.php">' . $_SESSION['username'] . '</a>
                   </li>';
                         echo '<li class="nav-item font-weight-bold text-size mx-md-1">
                     <a class="nav-link" style="cursor: pointer;" href="logout.php">Logout</a>
@@ -76,7 +76,7 @@ $apps = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         <?php } ?>
     </div>
-    <script src="js/jquery.js"></script>
+    <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap4.js"></script>
 </body>
 
