@@ -76,6 +76,7 @@ if (isset($_POST['update'])) {
       $stmt->execute(array(':id' => $_SESSION['id']));
       $_SESSION=$stmt->fetch(PDO::FETCH_ASSOC);
       header("location:profile.php");
+      exit;
     }
   }
 }

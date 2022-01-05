@@ -40,7 +40,7 @@ if (isset($_POST["value"])) {
         ':app_id'        =>    $_POST["app_id"],
     );
     $query = "
-    SELECT users.name,review_table.user_rating,review_table.user_review,review_table.datetime from users,
+    SELECT users.username,review_table.user_rating,review_table.user_review,review_table.datetime from users,
     review_table WHERE users.id = review_table.user_id AND review_table.app_id = :app_id ORDER BY review_table.review_id DESC  
     ";
     
@@ -51,7 +51,7 @@ if (isset($_POST["value"])) {
     // die();
     foreach ($result as $row) {
         $review_content[] = array(
-            'user_name'        =>    $row["name"],
+            'user_name'        =>    $row["username"],
             'user_review'    =>    $row["user_review"],
             'rating'        =>    $row["user_rating"],
             'datetime'        =>    date('d/m H:i', strtotime($row['datetime']))
