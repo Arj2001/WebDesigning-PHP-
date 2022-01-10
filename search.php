@@ -8,6 +8,7 @@ $stmt->bindValue(':name', "%$search%");
 $stmt->execute();
 $apps = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -63,10 +64,12 @@ $apps = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </form>
     </div>
     <div class="container mt-3 d-flex flex-wrap">
-        <?php foreach ($apps as $i => $apps) { ?>
+        <?php foreach ($apps as $i => $apps) {
+            $icon = str_replace("../../", "", $apps['icon']);
+            $icon = str_replace("../", "", $apps['icon']); ?>
             <div class="m-4 ">
                 <div class="card" style="width:200px">
-                    <img class="card-img-top" src="<?php echo str_replace("../../", "", $apps['icon']) ?> ">
+                    <img class="card-img-top" src="<?php echo $icon; ?> ">
                     <div class="card-body">
                         <h5 class="card-username text-nowrap"><?php echo $apps['name'] ?></h5>
                         <!-- <p class="card-text text-nowrap"><?php echo $apps['small_desc'] ?></p> -->

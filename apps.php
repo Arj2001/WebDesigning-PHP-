@@ -15,10 +15,17 @@ $stmt->bindValue(':id', $app_id);
 $stmt->execute();
 $apps = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$icon=str_replace("../../", "", $apps['icon']);
+$icon=str_replace("../", "", $apps['icon']);
 $filePath = str_replace("../../", "", $apps['file']);
+$filePath = str_replace("../", "", $apps['file']);
 $ext = pathinfo($apps['file'], PATHINFO_EXTENSION);
 $size = sizeConvert(filesize($filePath));
 
+$stmt=$pdo->prepare("SELECT users.name, users.email FROM users, dev_app WHERE dev_app.app_id= :id AND dev_app.user_id= users.id");
+$stmt->bindValue(':id', $app_id);
+$stmt->execute();
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
 // echo "<pre>";
 // var_dump($size);
 // exit;
@@ -68,7 +75,7 @@ $size = sizeConvert(filesize($filePath));
                     </li>';
           } else {
             echo '<li class="nav-item font-weight-bold text-size mx-md-1">
-                    <a class="nav-link" style="cursor: pointer;" href="login/">Login</a>
+                    <a class="nav-link" id="login" style="cursor: pointer;" href="login/">Login</a>
                     </li>';
           }
           ?>
@@ -77,7 +84,7 @@ $size = sizeConvert(filesize($filePath));
   </nav>
   <div class="container my-4">
     <div class="d-flex flex-row">
-      <img src="<?php echo str_replace("../../", "", $apps['icon']) ?>" class="float-left img-rounded img-thumbnail mr-2 mb-2" style="width:200px;" alt="app-image">
+      <img src="<?php echo $icon ?>" class="float-left img-rounded img-thumbnail mr-2 mb-2" style="width:200px;" alt="app-image">
       <div class="d-flex flex-column">
         <h4><?php echo $apps['name']; ?></h4>
         <h5><?php echo $apps['small_desc']; ?></h5>
@@ -87,12 +94,24 @@ $size = sizeConvert(filesize($filePath));
         <h6><b>License: </b><?php if ($apps['free'] == 0) {
                               echo "Free";
                             } else echo "Paid"; ?></h6>
+        <?php if(isset($user['name'])){ ?>
+            <h6><b>This software is uploaded by a developer named:<?php echo $user['name'] ?> <br>For contact:<?php echo $user['email']; ?></b></h6>
+        <?php  } ?>
       </div>
     </div>
     <br>
     <div class="conatiner ctag">
       <?php echo $apps['desc']; ?>
-      <a href="<?php echo str_replace("../../", "", $apps['file']) ?>" download="<?php echo $apps['name'] . '.' . $ext; ?>" class="btn btn-success btn-lg"><i class="fa fa-download mx-1"></i>Download file</a>
+      <?php if(!empty($_SESSION["username"])) { 
+        if($apps['free'] == 0){
+        ?>
+      <a href="<?php echo $filePath ?>" download="<?php echo $apps['name'] . '.' . $ext; ?>" class="btn btn-success btn-lg"><i class="fa fa-download mx-1"></i>Download file</a>
+      <?php } else{ ?>
+        <a href="<?php echo $filePath ?>" download="<?php echo $apps['name'] . '.' . $ext; ?>" class="btn btn-success btn-lg"><i class="fa fa-download mx-1"></i>Free Trial</a>
+        <a href="" class="btn btn-outline-dark btn-lg btn-grey">Buy </a>
+      <?php } }else{ ?>
+      <button onclick="focusFn()" class="btn btn-danger btn-lg">Login to Download</button>
+      <?php } ?>
     </div>
   </div>
   <div class="container">
@@ -218,6 +237,13 @@ $size = sizeConvert(filesize($filePath));
   .star-light {
     color: #e9ecef;
   }
+  #login:focus {
+  
+  border: 2px solid !important;
+  border-radius: 5px !important;
+  transform: scale(1.12) !important;
+}
+
 </style>
 <script>
   function changeTag() {
@@ -227,6 +253,9 @@ $size = sizeConvert(filesize($filePath));
       els[i].outerHTML = '<h4>' + els[i].innerHTML + '</h4>';
     }
   }
+  function focusFn() {
+     document.getElementById("login").focus();
+}
 </script>
 
 <script>

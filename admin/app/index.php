@@ -10,7 +10,8 @@ if (!$_SESSION) {
 }
 
 require_once('../../config.php');
-$statement = $pdo->prepare("SELECT * FROM apps ORDER BY id ");
+include_once("../../function.php");
+$statement = $pdo->prepare("SELECT * FROM apps WHERE not EXISTS(SELECT * from dev_app WHERE apps.id=dev_app.app_id)");
 $statement->execute();
 $apps = $statement->fetchAll(PDO::FETCH_ASSOC);
 // echo "<pre>";
@@ -81,7 +82,7 @@ $apps = $statement->fetchAll(PDO::FETCH_ASSOC);
           </tr>
         </thead>
         <tbody>
-          <?php foreach ($apps as $i => $apps) { ?>
+          <?php foreach ($apps as $i => $apps) {  $size = sizeConvert($apps['size']); ?>
             <!--: ?> -->
 
             <tr>
@@ -94,7 +95,7 @@ $apps = $statement->fetchAll(PDO::FETCH_ASSOC);
               <td><?php echo $apps['price'] ?></td>
               <td><?php if ($apps['free']==1) echo "No"; else echo "Yes" ?></td>
               <td><a href="<?php echo $apps['file']; ?>" download="<?php echo $apps['file']; ?>" class="download_link"><i class="fa fa-download "></i>Download</a></td>
-              <td><?php echo $apps['size'] ?></td>
+              <td><?php echo $size ?></td>
               <td><?php echo $apps['version'] ?></td>
               <td><?php echo $apps['date'] ?></td>
               <td>

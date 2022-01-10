@@ -15,12 +15,14 @@ if (isset($_POST['join'])) {
     $stmt->bindValue(':id', $_SESSION['id']);
     $stmt->execute();
 }
-$stmt = $pdo->prepare("SELECT * FROM developer WHERE user_id = :id");
+$stmt = $pdo->prepare("SELECT dev_id FROM developer WHERE user_id = :id");
 $stmt->bindValue(':id', $_SESSION['id']);
 $stmt->execute();
 $count = $stmt->rowCount();
 if ($count > 0) {
     $dev = true;
+    $_SESSION['dev_id']=$stmt->fetch(PDO::FETCH_COLUMN);
+   
 } else {
     $dev = false;
 }

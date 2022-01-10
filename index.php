@@ -67,18 +67,24 @@ session_start();
     <h2 class="text-center">Try our Suggestions..</h2>
     <?php
     require_once('config.php');
-    $stmt = $pdo->prepare("SELECT * FROM apps ORDER BY rand() LIMIT 3");
+    $stmt = $pdo->prepare("SELECT * FROM apps ORDER BY rand() LIMIT 4");
     $stmt->execute();
     $apps = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    
     // echo "<pre>";
-    // var_dump($apps);
+    // var_dump($apps['icon']);
     // exit;
     ?>
     <div class="container mt-3 d-flex flex-wrap">
       <?php foreach ($apps as $i => $apps) { ?>
+        <?php 
+        $icon=str_replace("../../", "", $apps['icon']);
+        $icon=str_replace("../", "", $apps['icon']);
+        ?>
         <div class="m-4 ">
           <div class="card" style="width:200px">
-            <img class="card-img-top" src="<?php echo str_replace("../../","",$apps['icon']) ?> " >
+            <img class="card-img-top" src="<?php echo $icon ?> ">
             <div class="card-body">
               <h5 class="card-username text-nowrap"><?php echo $apps['name'] ?></h5>
               <a href="apps.php?id=<?php echo $apps['id'] ?>" class="btn btn-outline-dark stretched-link download_link">Download</a>
@@ -91,4 +97,5 @@ session_start();
   <script src="js/jquery.min.js"></script>
   <script src="js/bootstrap4.js"></script>
 </body>
+
 </html>
