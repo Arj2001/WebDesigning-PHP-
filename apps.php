@@ -15,20 +15,31 @@ $stmt->bindValue(':id', $app_id);
 $stmt->execute();
 $apps = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$icon=str_replace("../../", "", $apps['icon']);
-$icon=str_replace("../", "", $apps['icon']);
+$icon = str_replace("../../", "", $apps['icon']);
+$icon = str_replace("../", "", $apps['icon']);
 $filePath = str_replace("../../", "", $apps['file']);
 $filePath = str_replace("../", "", $apps['file']);
 $ext = pathinfo($apps['file'], PATHINFO_EXTENSION);
 $size = sizeConvert(filesize($filePath));
 
-$stmt=$pdo->prepare("SELECT users.name, users.email FROM users, dev_app WHERE dev_app.app_id= :id AND dev_app.user_id= users.id");
+$stmt = $pdo->prepare("SELECT users.name, users.email FROM users, dev_app WHERE dev_app.app_id= :id AND dev_app.user_id= users.id");
 $stmt->bindValue(':id', $app_id);
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 // echo "<pre>";
 // var_dump($size);
 // exit;
+$stmt = $pdo->prepare("SELECT * FROM favorite WHERE user_id = :user_id AND app_id =:id");
+$stmt->bindValue(':id', $app_id);
+$stmt->bindValue(':user_id', $_SESSION['id']);
+$stmt->execute();
+$rowcount=$stmt->rowCount();
+
+$stmt = $pdo->prepare("SELECT * FROM sold WHERE user_id = :user_id AND app_id =:id");
+$stmt->bindValue(':id', $app_id);
+$stmt->bindValue(':user_id', $_SESSION['id']);
+$stmt->execute();
+$paycount=$stmt->rowCount();
 ?>
 <!doctype html>
 <html lang="en">
@@ -47,7 +58,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
   <script src="js/bootstrap4.js"></script>
   <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
-  
+
   <title><?php echo $apps['name']; ?></title>
 </head>
 
@@ -94,23 +105,31 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
         <h6><b>License: </b><?php if ($apps['free'] == 0) {
                               echo "Free";
                             } else echo "Paid"; ?></h6>
-        <?php if(isset($user['name'])){ ?>
-            <h6><b>This software is uploaded by a developer named:<?php echo $user['name'] ?> <br>For contact:<?php echo $user['email']; ?></b></h6>
+        <?php if (isset($user['name'])) { ?>
+          <h6><b>This software is uploaded by a developer named:<?php echo $user['name'] ?> <br>For contact:<?php echo $user['email']; ?></b></h6>
         <?php  } ?>
+      </div>
+      <div class="ml-5 ">
+        <i class="<?php if($rowcount>0){ echo 'fas'; }else { echo 'fal'; } ?> fa-heart fa-3x text-success" name="fav" id="fav"></i>
+        <span class="text-success text-center d-none" id="fav_a">Add to favorites</span>
+        <span class="text-danger text-center d-none" id="fav_r">Remove from favorites</span>
       </div>
     </div>
     <br>
     <div class="conatiner ctag">
       <?php echo $apps['desc']; ?>
-      <?php if(!empty($_SESSION["username"])) { 
-        if($apps['free'] == 0){
-        ?>
-      <a href="<?php echo $filePath ?>" download="<?php echo $apps['name'] . '.' . $ext; ?>" class="btn btn-success btn-lg"><i class="fa fa-download mx-1"></i>Download file</a>
-      <?php } else{ ?>
-        <a href="<?php echo $filePath ?>" download="<?php echo $apps['name'] . '.' . $ext; ?>" class="btn btn-success btn-lg"><i class="fa fa-download mx-1"></i>Free Trial</a>
-        <a href="" class="btn btn-outline-dark btn-lg btn-grey">Buy </a>
-      <?php } }else{ ?>
-      <button onclick="focusFn()" class="btn btn-danger btn-lg">Login to Download</button>
+      <?php if (!empty($_SESSION["username"])) {
+        if ($apps['free'] == 0) {
+      ?>
+          <a href="<?php echo $filePath ?>" download="<?php echo $apps['name'] . '.' . $ext; ?>" class="btn btn-success btn-lg"><i class="fa fa-download mx-1"></i>Download file</a>
+        <?php } else { ?>
+        <?php if($paycount>0){ ?>
+          <a href="<?php echo $filePath ?>" download="<?php echo $apps['name'] . '.' . $ext; ?>" class="btn btn-success btn-lg"><i class="fa fa-download mx-1"></i>Download file</a>
+        <?php }else{ ?>  
+          <a href="buy.php?id=<?php echo $apps['id'] ?>" class="btn btn-outline-dark btn-lg btn-grey">Buy </a>
+        <?php } }
+      } else { ?>
+        <button onclick="focusFn()" class="btn btn-danger btn-lg">Login to Download</button>
       <?php } ?>
     </div>
   </div>
@@ -237,13 +256,12 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
   .star-light {
     color: #e9ecef;
   }
-  #login:focus {
-  
-  border: 2px solid !important;
-  border-radius: 5px !important;
-  transform: scale(1.12) !important;
-}
 
+  #login:focus {
+    border: 2px solid !important;
+    border-radius: 5px !important;
+    transform: scale(1.12) !important;
+  }
 </style>
 <script>
   function changeTag() {
@@ -253,42 +271,97 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
       els[i].outerHTML = '<h4>' + els[i].innerHTML + '</h4>';
     }
   }
+
   function focusFn() {
-     document.getElementById("login").focus();
-}
+    document.getElementById("login").focus();
+  }
+  $('.fas.fa-heart').hover(function() {
+    $(this).removeClass('text-success');
+    $(this).addClass('text-danger');
+    $('#fav_r').removeClass('d-none');
+  }, function() {
+    $(this).removeClass('text-danger');
+    $(this).addClass('text-success');
+    $('#fav_r').addClass('d-none');
+  });
+  $('.fal.fa-heart').hover(function() {
+    $(this).removeClass('fal');
+    $(this).addClass('fas');
+    $('#fav_a').removeClass('d-none');
+  }, function() {
+    $(this).removeClass('fas');
+    $(this).addClass('fal');
+    $('#fav_a').addClass('d-none');
+  });
 </script>
 
 <script>
   $(document).ready(function() {
-    var check = "<?php echo $_SESSION['id'] ?? null; ?>"; 
+    var check = "<?php echo $_SESSION['id'] ?? null; ?>";
     var app_id = <?php echo $app_id; ?>;
+    var rowcount =<?php if($rowcount>0){ echo 'false';}else echo 'true';?>;
     // console.log(check);
     var rating_data = 0;
-    var cr=checkReview();
+    var cr = checkReview();
     console.log(cr);
-    $('#add_review').click(function() {
-      if(check == ''){
-        alert('You have to login to make review');
-      } 
-      else if(cr==1){
-        alert('You can only review one time,(May be you should edit your previously written review)');
+    $('#fav').click(function() {
+      //console.log($('#fav').hasClass('fas'));
+
+      if (rowcount){
+        console.log("enter");
+        $.ajax({
+          url: "favorite.php",
+          method: "POST",
+          data: {
+            add: "add",
+            user_id: check,
+            app_id: app_id,
+          },
+          success: function() {
+            window.location.reload();
+          }
+        });
+      } else {
+        console.log('remove');
+        $.ajax({
+          url: "favorite.php",
+          method: "POST",
+          data: {
+            remove: "remove",
+            user_id: check,
+            app_id: app_id,
+          },
+          success: function() {
+            // alert('Succesfully removed from favorites');
+            window.location.reload();
+            
+          },
+          
+        });
       }
-      else
-      $('#review_modal').modal('show');
+    });
+    $('#add_review').click(function() {
+      if (check == '') {
+        alert('You have to login to make review');
+      } else if (cr == 1) {
+        alert('You can only review one time,(May be you should edit your previously written review)');
+      } else
+        $('#review_modal').modal('show');
 
     });
-    function checkReview(callback){
-      var result='';
+
+    function checkReview(callback) {
+      var result = '';
       $.ajax({
-        url:'review.php',
-        async:false,
-        method:'POST',
+        url: 'review.php',
+        async: false,
+        method: 'POST',
         data: {
           'check': check,
-          'app_id':app_id
+          'app_id': app_id
         },
-        success:function(data){
-          result =data;
+        success: function(data) {
+          result = data;
         }
       });
       return result;
@@ -333,14 +406,14 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     $(document).on('click', '.submit_star', function() {
 
       rating_data = $(this).data('rating');
-    
+
     });
 
     $('#save_review').click(function() {
 
       var user_id = $('#user_id').val();
       var app_id = $('#app_id').val();
-      
+
       var user_review = $('#user_review').val();
 
       if (rating_data == 0) {
@@ -357,7 +430,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
             user_review: user_review
           },
           success: function(data) {
-            
+
             $('#review_modal').modal('hide');
 
             load_rating_data();
@@ -374,17 +447,17 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
     load_rating_data();
 
     function load_rating_data() {
-      
+
       var app_id = <?php echo $app_id; ?>;
       // console.log(app_id);
       // console.log("successd");
-      
+
       $.ajax({
         url: "review.php",
         method: "POST",
         dataType: "JSON",
         data: {
-          value:"value",
+          value: "value",
           'app_id': app_id,
         },
         success: function(data) {

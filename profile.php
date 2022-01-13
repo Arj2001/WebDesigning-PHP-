@@ -21,11 +21,21 @@ $stmt->execute();
 $count = $stmt->rowCount();
 if ($count > 0) {
     $dev = true;
-    $_SESSION['dev_id']=$stmt->fetch(PDO::FETCH_COLUMN);
-   
+    $_SESSION['dev_id'] = $stmt->fetch(PDO::FETCH_COLUMN);
 } else {
     $dev = false;
 }
+$stmt = $pdo->prepare("SELECT apps.id,apps.icon,apps.name FROM apps, favorite WHERE favorite.user_id = :id AND favorite.app_id = apps.id");
+$stmt->bindValue(':id', $_SESSION['id']);
+$stmt->execute();
+$countfav=$stmt->rowCount();
+$apps = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+$stmt = $pdo->prepare("SELECT apps.id,apps.icon,apps.name FROM apps, sold WHERE sold.user_id = :id AND sold.app_id = apps.id");
+$stmt->bindValue(':id', $_SESSION['id']);
+$stmt->execute();
+$countdn=$stmt->rowCount();
+$appsdn = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -89,16 +99,16 @@ if ($count > 0) {
                         </div>
                     </div>
                     <div class="card mt-3 p-md-2">
-                    <?php if ($dev) {
-                        echo '<h5 for="#join_dev" class="my-md-2 text-center"><b>Developer</b></h5>
+                        <?php if ($dev) {
+                            echo '<h5 for="#join_dev" class="my-md-2 text-center"><b>Developer</b></h5>
                              <a href="developer/index.php" class="btn btn-outline-danger">Enter</a>';
-                    } else {
-                        echo '
+                        } else {
+                            echo '
                               <h5 for="#join_dev" class="my-md-2 text-center"><b>Join as Developer</b></h5>
                               <input type="button" id="join_dev" class="btn btn-outline-danger" value="JOIN" data-toggle="modal" data-target="#join">
                               ';
-                    }
-                    ?>
+                        }
+                        ?>
                     </div>
                 </div>
                 <div class="col-md-8">
@@ -159,8 +169,50 @@ if ($count > 0) {
                             </div>
                         </div>
                     </div>
-                    <!-- <div class="row gutters-sm">
-                        <div class="col-sm-6 mb-3">
+                    <div class="row gutters-sm">
+                        <div class="col-sm-6 mb-3 <?php if($countfav==0) echo 'd-none' ?>">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="d-flex align-items-center mb-3">Favorite Apps</h5>
+                                    <div style="max-height: 220px; overflow-y: scroll;">
+                                        <?php foreach ($apps as $i => $apps) {
+                                            $icon = str_replace("../../", "", $apps['icon']);
+                                            $icon = str_replace("../", "", $apps['icon']); ?>
+                                            <div class="mb-3 ">
+                                                <?php echo $apps['name']; ?>
+                                                <img src="<?php echo $icon; ?>" width="25px">
+                                                <div class="float-right">
+                                                    <a href="apps.php?id=<?php echo $apps['id'] ?>" class="btn btn-dark m-2">View</a>
+                                                </div>
+                                                <hr>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 mb-3 <?php if($countdn==0) echo 'd-none' ?>">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="d-flex align-items-center mb-3">Paid Apps</h5>
+                                    <div style="max-height: 220px; overflow-y: scroll;">
+                                        <?php foreach ($appsdn as $i => $appsdn) {
+                                            $icon = str_replace("../../", "", $appsdn['icon']);
+                                            $icon = str_replace("../", "", $appsdn['icon']); ?>
+                                            <div class="mb-3 ">
+                                                <?php echo $appsdn['name']; ?>
+                                                <img src="<?php echo $icon; ?>" width="25px">
+                                                <div class="float-right">
+                                                    <a href="apps.php?id=<?php echo $appsdn['id'] ?>" class="btn btn-dark m-2">View</a>
+                                                </div>
+                                                <hr>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="col-sm-6 mb-3">
                             <div class="card h-100">
                                 <div class="card-body">
                                     <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
@@ -186,35 +238,8 @@ if ($count > 0) {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-6 mb-3">
-                            <div class="card h-100">
-                                <div class="card-body">
-                                    <h6 class="d-flex align-items-center mb-3"><i class="material-icons text-info mr-2">assignment</i>Project Status</h6>
-                                    <small>Web Design</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>Website Markup</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>One Page</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 89%" aria-valuenow="89" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>Mobile Template</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <small>Backend API</small>
-                                    <div class="progress mb-3" style="height: 5px">
-                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 66%" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
+                        </div> -->
+                    </div>
                 </div>
             </div>
 
