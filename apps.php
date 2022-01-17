@@ -14,6 +14,13 @@ $stmt = $pdo->prepare("SELECT * FROM apps WHERE id = :id");
 $stmt->bindValue(':id', $app_id);
 $stmt->execute();
 $apps = $stmt->fetch(PDO::FETCH_ASSOC);
+if ($apps['status'] == 0) {
+  echo '<script type="text/javascript">
+  alert("This app has been deactivated");
+  window.location.href="./";
+  </script>';
+  exit;
+}
 
 $icon = str_replace("../../", "", $apps['icon']);
 $icon = str_replace("../", "", $apps['icon']);
@@ -29,18 +36,21 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 // echo "<pre>";
 // var_dump($size);
 // exit;
+// if(!empty($_SESSION['id'])){
 $stmt = $pdo->prepare("SELECT * FROM favorite WHERE user_id = :user_id AND app_id =:id");
 $stmt->bindValue(':id', $app_id);
-$stmt->bindValue(':user_id', $_SESSION['id']);
+$stmt->bindValue(':user_id', $_SESSION['id'] ?? null);
 $stmt->execute();
-$rowcount=$stmt->rowCount();
+$rowcount = $stmt->rowCount();
 
 $stmt = $pdo->prepare("SELECT * FROM sold WHERE user_id = :user_id AND app_id =:id");
 $stmt->bindValue(':id', $app_id);
-$stmt->bindValue(':user_id', $_SESSION['id']);
+$stmt->bindValue(':user_id', $_SESSION['id'] ?? null);
 $stmt->execute();
-$paycount=$stmt->rowCount();
+$paycount = $stmt->rowCount();
+
 ?>
+
 <!doctype html>
 <html lang="en">
 
@@ -64,7 +74,7 @@ $paycount=$stmt->rowCount();
 
 <body onload="changeTag()">
   <nav class="conatiner">
-    <nav class="navbar navbar-expand-lg navbar-light bg-warning">
+    <nav class="navbar navbar-expand-lg navbar-light bg-warning fixed-top">
       <a class="navbar-brand mx-md-4" href="./">STORE</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -93,7 +103,7 @@ $paycount=$stmt->rowCount();
       </div>
     </nav>
   </nav>
-  <div class="container my-4">
+  <div class="container my-4" style="margin-top:5rem !important">
     <div class="d-flex flex-row">
       <img src="<?php echo $icon ?>" class="float-left img-rounded img-thumbnail mr-2 mb-2" style="width:200px;" alt="app-image">
       <div class="d-flex flex-column">
@@ -110,7 +120,11 @@ $paycount=$stmt->rowCount();
         <?php  } ?>
       </div>
       <div class="ml-5 ">
-        <i class="<?php if($rowcount>0){ echo 'fas'; }else { echo 'fal'; } ?> fa-heart fa-3x text-success" name="fav" id="fav"></i>
+        <i class="<?php if ($rowcount > 0) {
+                    echo 'fas';
+                  } else {
+                    echo 'fal';
+                  } ?> fa-heart fa-3x text-success" name="fav" id="fav"></i>
         <span class="text-success text-center d-none" id="fav_a">Add to favorites</span>
         <span class="text-danger text-center d-none" id="fav_r">Remove from favorites</span>
       </div>
@@ -123,13 +137,14 @@ $paycount=$stmt->rowCount();
       ?>
           <a href="<?php echo $filePath ?>" download="<?php echo $apps['name'] . '.' . $ext; ?>" class="btn btn-success btn-lg"><i class="fa fa-download mx-1"></i>Download file</a>
         <?php } else { ?>
-        <?php if($paycount>0){ ?>
-          <a href="<?php echo $filePath ?>" download="<?php echo $apps['name'] . '.' . $ext; ?>" class="btn btn-success btn-lg"><i class="fa fa-download mx-1"></i>Download file</a>
-        <?php }else{ ?>  
-          <a href="buy.php?id=<?php echo $apps['id'] ?>" class="btn btn-outline-dark btn-lg btn-grey">Buy </a>
-        <?php } }
+          <?php if ($paycount > 0) { ?>
+            <a href="<?php echo $filePath ?>" download="<?php echo $apps['name'] . '.' . $ext; ?>" class="btn btn-success btn-lg"><i class="fa fa-download mx-1"></i>Download file</a>
+          <?php } else { ?>
+            <a href="buy.php?id=<?php echo $apps['id'] ?>" class="btn btn-outline-dark btn-lg btn-grey">Buy for ₹<?php echo $apps['price'] ?></a>
+        <?php }
+        }
       } else { ?>
-        <button onclick="focusFn()" class="btn btn-danger btn-lg">Login to Download</button>
+        <a href="login/" class="btn btn-danger btn-lg">Login to Download</a>
       <?php } ?>
     </div>
   </div>
@@ -299,15 +314,18 @@ $paycount=$stmt->rowCount();
   $(document).ready(function() {
     var check = "<?php echo $_SESSION['id'] ?? null; ?>";
     var app_id = <?php echo $app_id; ?>;
-    var rowcount =<?php if($rowcount>0){ echo 'false';}else echo 'true';?>;
+    var rowcount = <?php if ($rowcount > 0) {
+                      echo 'false';
+                    } else echo 'true'; ?>;
     // console.log(check);
     var rating_data = 0;
     var cr = checkReview();
     console.log(cr);
     $('#fav').click(function() {
       //console.log($('#fav').hasClass('fas'));
-
-      if (rowcount){
+      if (!check) {
+        alert("You have to login");
+      } else if (rowcount) {
         console.log("enter");
         $.ajax({
           url: "favorite.php",
@@ -334,9 +352,9 @@ $paycount=$stmt->rowCount();
           success: function() {
             // alert('Succesfully removed from favorites');
             window.location.reload();
-            
+
           },
-          
+
         });
       }
     });

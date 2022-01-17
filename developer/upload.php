@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         //   echo $iconPath."<br>";
         //   echo $filePath;
         //   exit;
-        $statement = $pdo->prepare("INSERT INTO `apps` (name, `icon`, `small_desc`, `desc`, `price`, `free`, `file`, `size`, `version`, `date`, `dir`) VALUES (:name, :icon , :small_desc, :desc, :price, :free, :file, :size, :version, :date, :dir)
+        $statement = $pdo->prepare("INSERT INTO `apps` (name, `icon`, `small_desc`, `desc`, `price`, `free`, `file`, `size`, `version`, `date`, `dir`,`status`) VALUES (:name, :icon , :small_desc, :desc, :price, :free, :file, :size, :version, :date, :dir,1)
           ");
         $statement->bindValue(':name', $name);
         $statement->bindValue(':icon', $iconPath);

@@ -67,7 +67,7 @@ session_start();
     <h2 class="text-center">Try our Suggestions..</h2>
     <?php
     require_once('config.php');
-    $stmt = $pdo->prepare("SELECT * FROM apps ORDER BY rand() LIMIT 4");
+    $stmt = $pdo->prepare("SELECT * FROM apps WHERE status = 1 ORDER BY rand() LIMIT 4");
     $stmt->execute();
     $apps = $stmt->fetchAll(PDO::FETCH_ASSOC);
     

@@ -58,8 +58,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     }
   if (empty($errors)) {
-    $statement = $pdo->prepare("INSERT INTO users(username, email, name, age, password, created_date)
-              VALUES (:username , :email , :name , :age, :password,  :date)
+    $statement = $pdo->prepare("INSERT INTO users(username, email, name, age, password, created_date,status)
+              VALUES (:username , :email , :name , :age, :password,  :date, 0)
             ");
 
     $statement->bindValue(':username', $username);

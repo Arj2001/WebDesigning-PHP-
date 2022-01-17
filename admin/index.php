@@ -48,7 +48,7 @@ if (!isset($_SESSION['admin_id'])) {
     <h3 style='text-transform:capitalize'>Welcome <b><?php echo $_SESSION["uname"]; ?></b> to Admin Panel</h3>
   </div>
   <div class="container mt-3 d-flex flex-wrap">
-    <div class="m-4 ">
+    <!-- <div class="m-4 ">
       <div class="card" style="width:30rem; height:20rem;">
 
         <div class="card-body ">
@@ -58,14 +58,14 @@ if (!isset($_SESSION['admin_id'])) {
           <a href="#" class="stretched-link"></a>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="m-4 ">
       <div class="card" style="width:30rem; height:20rem;">
         <div class="card-body">
           <img src="images/users.png" alt="admin-logo" class="card-img-top" style="height:85%; ">
           <h4 class="card-username">Users</h4>
           <p class="card-text">View users and active/deactive them</p>
-          <a href="#" class="stretched-link"></a>
+          <a href="users.php" class="stretched-link"></a>
         </div>
       </div>
     </div>

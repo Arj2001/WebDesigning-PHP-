@@ -3,7 +3,7 @@
 session_start();
 require_once('config.php');
 $search = $_GET['search'] ?? '';
-$stmt = $pdo->prepare('SELECT * FROM apps WHERE name LIKE :name ORDER BY `date` DESC');
+$stmt = $pdo->prepare('SELECT * FROM apps WHERE name LIKE :name AND status = 1 ORDER BY `date` DESC');
 $stmt->bindValue(':name', "%$search%");
 $stmt->execute();
 $apps = $stmt->fetchAll(PDO::FETCH_ASSOC);

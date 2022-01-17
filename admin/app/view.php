@@ -1,6 +1,6 @@
 <?php
 session_start();
-if (!$_SESSION) {
+if (!$_SESSION['uname']) {
     echo '<script type="text/javascript">
     alert("Your are doing an illegal entry please login to continue");
     window.location.href="../index.php";
